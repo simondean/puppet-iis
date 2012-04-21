@@ -6,5 +6,6 @@ gem "win32-dir"
 gem "win32-service"
 gem "win32-taskscheduler"
 
+gem "puppet"
 gem "puppet-lint"
 gem "cucumber-puppet"

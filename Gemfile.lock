@@ -14,11 +14,16 @@ GEM
       templater
     diff-lcs (1.1.3)
     extlib (0.9.15)
+    facter (1.6.7)
     gem-man (0.3.0)
+    gherkin (2.9.3)
+      json (>= 1.4.6)
     gherkin (2.9.3-x86-mingw32)
       json (>= 1.4.6)
     highline (1.6.11)
     json (1.6.6)
+    puppet (2.7.13)
+      facter (>= 1.5.1)
     puppet-lint (0.1.13)
     sys-admin (1.5.6)
     sys-admin (1.5.6-x86-mingw32)
@@ -52,6 +57,7 @@ PLATFORMS
 
 DEPENDENCIES
   cucumber-puppet
+  puppet
   puppet-lint
   sys-admin
   win32-dir
