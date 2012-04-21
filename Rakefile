@@ -9,3 +9,9 @@ task :smoke_test do
 		raise 'Test manifest failed' unless success
 	end
 end
+
+desc "Build package"
+task :build do
+	success = system('bundle', 'exec', 'puppet', 'module', 'build')
+	raise 'Build failed' unless success
+end
