@@ -21,3 +21,24 @@ task :build do
 	success = system('bundle', 'exec', 'puppet', 'module', 'build')
 	raise 'Build failed' unless success
 end
+
+task :apppool_properties do
+	require 'nokogiri'
+	
+	puts "Apppool properties"
+	
+	command_line = "\"#{File.join(ENV["SystemRoot"], "system32/inetsrv/appcmd.exe")}\" list apppool \"/apppool.name:Classic .NET AppPool\" /xml /config:*"
+	xml_text = `#{command_line}`
+	
+	xml = Nokogiri::XML(xml_text)
+	
+	xml.xpath("//APPPOOL//*").each do |element|
+		element.attributes.each_key do |key|
+			
+			property = element.path.downcase().gsub('/', '_') + '_'
+			property = property.gsub('_appcmd_apppool_add_', '')
+			property += key.downcase()
+			puts property
+		end
+	end
+end
