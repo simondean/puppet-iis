@@ -1,0 +1,32 @@
+GEM
+  remote: http://rubygems.org/
+  specs:
+    puppet-lint (0.1.13)
+    sys-admin (1.5.6-x86-mingw32)
+      win32-security (>= 0.1.2)
+    win32-api (1.4.8-x86-mingw32)
+    win32-dir (0.3.7)
+      windows-pr (>= 1.0.9)
+    win32-process (0.6.5)
+      windows-pr (>= 1.1.2)
+    win32-security (0.1.2)
+      windows-pr (>= 0.9.8)
+    win32-service (0.7.2-x86-mingw32)
+      windows-pr (>= 1.0.8)
+    win32-taskscheduler (0.2.2)
+    windows-api (0.4.1)
+      win32-api (>= 1.4.5)
+    windows-pr (1.2.1)
+      win32-api (>= 1.4.5)
+      windows-api (>= 0.3.0)
+
+PLATFORMS
+  x86-mingw32
+
+DEPENDENCIES
+  puppet-lint
+  sys-admin
+  win32-dir
+  win32-process
+  win32-service
+  win32-taskscheduler
