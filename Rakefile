@@ -22,6 +22,11 @@ task :build do
 	raise 'Build failed' unless success
 end
 
+task :acceptance_test do
+  success = system('bundle', 'exec', 'cucumber', '--strict')
+  raise 'Build failed' unless success
+end
+
 task :apppool_properties do
 	require 'nokogiri'
 	

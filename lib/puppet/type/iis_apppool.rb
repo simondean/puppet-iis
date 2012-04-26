@@ -4,7 +4,6 @@ Puppet::Type.newtype(:iis_apppool) do
 
   newparam(:name) do
     desc "App pool name"
-    isnamevar
   end
   
 	['queuelength',
