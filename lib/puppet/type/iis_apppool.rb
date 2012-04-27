@@ -1,12 +1,18 @@
 Puppet::Type.newtype(:iis_apppool) do
   @doc = "IIS App Pool"
-  ensurable
+  #ensurable
 
   newparam(:name) do
     desc "App pool name"
   end
-  
-	['queuelength',
+
+  newproperty(:ensure) do
+    desc "Ensures the app pool is present or absent"
+    newvalue :present
+    newvalue :absent
+  end
+
+  ['queuelength',
 	 'autostart',
 	 'enable32bitapponwin64',
 	 'managedruntimeversion',
