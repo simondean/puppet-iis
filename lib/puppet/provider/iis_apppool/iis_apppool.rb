@@ -44,41 +44,41 @@ Puppet::Type.type(:iis_apppool).provide(:iis_apppool) do
     end
   end
 
-  def create
-    puts "Create"
-    puts "Should #{@resource.should(:ensure)}"
-    puts "Is #{get(:ensure)}"
+  #def create
+  #  puts "Create"
+  #  puts "Should #{@resource.should(:ensure)}"
+  #  puts "Is #{get(:ensure)}"
+  #
+  #  puts "Properties"
+  #  @property_hash.each { |name, value| puts "#{name}: #{value}" }
+  #
+  #  #if @resource.should(:ensure) == @property_hash[:ensure]
+  #  #  return
+  #  #end
+  #
+  #  @property_hash[:ensure] = :present
+  #  appcmd 'add', 'apppool', "/name:#{resource[:name]}"
+  #end
 
-    puts "Properties"
-    @property_hash.each { |name, value| puts "#{name}: #{value}" }
+  #def destroy
+  #  puts "Destroy"
+  #  puts "Should #{@resource.should(:ensure)}"
+  #  puts "Is #{get(:ensure)}"
+  #
+  #  #if @resource.should(:ensure) == get(:ensure)
+  #  #  return
+  #  #end
+  #
+  #  @property_hash[:ensure] = :absent
+  #  appcmd 'delete', 'apppool', "/name:#{resource[:name]}"
+  #end
 
-    #if @resource.should(:ensure) == @property_hash[:ensure]
-    #  return
-    #end
-
-    @property_hash[:ensure] = :present
-    appcmd 'add', 'apppool', "/name:#{resource[:name]}"
-  end
-
-  def destroy
-    puts "Destroy"
-    puts "Should #{@resource.should(:ensure)}"
-    puts "Is #{get(:ensure)}"
-
-    #if @resource.should(:ensure) == get(:ensure)
-    #  return
-    #end
-
-    @property_hash[:ensure] = :absent
-    appcmd 'delete', 'apppool', "/name:#{resource[:name]}"
-  end
-
-  def exists?
-    properties[:ensure] != :absent
-  	#output = appcmd('list', 'apppool', '/xml')
-  	#xml = Nokogiri::XML(output)
-  	#xml.xpath("/appcmd/APPPOOL[@name=\"#{resource[:name]}\"]").count > 0
-  end
+  #def exists?
+  #  properties[:ensure] != :absent
+  #	#output = appcmd('list', 'apppool', '/xml')
+  #	#xml = Nokogiri::XML(output)
+  #	#xml.xpath("/appcmd/APPPOOL[@name=\"#{resource[:name]}\"]").count > 0
+  #end
 
   def properties
     puts "properties"
@@ -93,20 +93,27 @@ Puppet::Type.type(:iis_apppool).provide(:iis_apppool) do
   def flush
     puts "flush"
     puts "resource #{@resource[:ensure]}"
+    puts "resource should #{@resource.should(:ensure)}"
+    puts "resource should #{@resource.should(:ensure)}"
     puts "provider #{@property_hash[:ensure]}"
 
-    if @resource[:ensure] != @property_hash[:ensure]
-      if @resource[:ensure] == :present
+    if @resource[:ensure] != :absent
+      unless exists?
         puts "create"
         appcmd 'add', 'apppool', "/name:#{resource[:name]}"
-        @property_hash[:ensure] = :present
       else
-        puts "delete"
-        appcmd 'delete', 'apppool', "/name:#{resource[:name]}"
-        @property_hash[:ensure] = :absent
+        puts "update"
       end
+
+      @property_hash[:ensure] = :present
     else
-      puts "update"
+      puts "delete"
+
+      if exists?
+        appcmd 'delete', 'apppool', "/name:#{resource[:name]}"
+      end
+
+      @property_hash[:ensure] = :absent
     end
   end
 
@@ -166,5 +173,11 @@ Puppet::Type.type(:iis_apppool).provide(:iis_apppool) do
     @property_hash.update(hash)
     @property_hash.dup
     puts "end query"
+  end
+
+  def exists?
+    output = appcmd("list", "apppool", "/xml")
+    xml = Nokogiri::XML(output)
+    xml.xpath("/appcmd/APPPOOL[@APPPOOL.NAME='#{name}']").length > 0
   end
 end

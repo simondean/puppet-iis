@@ -66,7 +66,7 @@ Puppet::Type.newtype(:iis_apppool) do
 		newproperty(property.to_sym())
   end
 
-  #def exists?
-  #  @provider.get(:ensure) != :absent
-  #end
+  def exists?
+    @provider.get(:ensure) != :absent
+  end
 end

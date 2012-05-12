@@ -6,10 +6,10 @@ def delete_apppool(name)
 end
 
 def apppool_exists?(name)
-  output = `#{@appcmd} list apppool /xml /config:*`
+  output = `#{@appcmd} list apppool /xml`
   raise "Failed to list apppools.  Exit code #{$?.exitstatus}" unless $?.success?
   xml = Nokogiri::XML(output)
-  xml.xpath("/appcmd/APPPOOL/add[@name='#{name}']").length > 0
+  xml.xpath("/appcmd/APPPOOL[@APPPOOL.NAME='#{name}']").length > 0
 end
 
 Given /^there is no app pool named "([^"]*)"$/ do |name|
