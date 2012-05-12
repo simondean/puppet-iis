@@ -22,6 +22,7 @@ task :build do
 	raise 'Build failed' unless success
 end
 
+desc "Run acceptance tests"
 task :acceptance_test do
   success = system('bundle', 'exec', 'cucumber', '--strict')
   raise 'Build failed' unless success
