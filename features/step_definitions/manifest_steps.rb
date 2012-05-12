@@ -27,3 +27,7 @@ When /^the manifest is applied$/ do
     manifest_file.delete
   end
 end
+
+Then /^changes were applied$/ do
+  @changes.should == true
+end

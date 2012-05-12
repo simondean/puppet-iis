@@ -4,23 +4,25 @@ Feature: App pools
   I want to manage IIS app pools
   
   Scenario: Create an app pool
-    Given no app pool called "TestApppool9001"
+    Given no app pool called "PuppetTest"
     Given the manifest
       """
-      iis_apppool {"TestApppool9001":
+      iis_apppool {"PuppetTest":
         ensure => present,
       }
       """
     When the manifest is applied
-    Then the "TestApppool9001" app pool exists
+    Then changes were applied
+    Then the "PuppetTest" app pool exists
 
   Scenario: Delete an app pool
-    Given an app pool called "TestApppool9001"
+    Given an app pool called "PuppetTest"
     Given the manifest
     """
-      iis_apppool {"TestApppool9002":
+      iis_apppool {"PuppetTest":
         ensure => absent,
       }
       """
     When the manifest is applied
-    Then the "TestApppool9002" app pool does not exists
+    Then changes were applied
+    Then the "PuppetTest" app pool does not exists
