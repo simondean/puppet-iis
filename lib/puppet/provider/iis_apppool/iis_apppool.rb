@@ -25,9 +25,17 @@ Puppet::Type.type(:iis_apppool).provide(:iis_apppool) do
   end
 
   def exists?
-    output = appcmd("list", "apppool", "/xml")
-    xml = Nokogiri::XML(output)
-    xml.xpath("/appcmd/APPPOOL[@APPPOOL.NAME='#{resource[:name]}']").length > 0
+    begin
+      appcmd("list", "apppool", resource[:name])
+    rescue Puppet::ExecutionFailure
+      if $?.exitstatus == 1
+        return false
+      else
+        raise
+      end
+    else
+      return true
+    end
   end
 
   def properties
@@ -55,8 +63,15 @@ Puppet::Type.type(:iis_apppool).provide(:iis_apppool) do
   end
 
   private
-  def self.list(name = nil)
+  def self.list
     parse_items_xml(appcmd('list', 'apppool', '/xml', '/config:*'))
+  end
+
+  def query
+    hash = parse_items_xml(appcmd('list', 'apppool', '/xml', '/config:*', "/name:#{name}"))[0]
+
+    @property_hash.update(hash)
+    @property_hash.dup
   end
 
   def self.parse_items_xml(output)
@@ -82,12 +97,5 @@ Puppet::Type.type(:iis_apppool).provide(:iis_apppool) do
 
   def self.build_key(prefix, sub_key)
     prefix ? prefix + '_' + sub_key.downcase : sub_key.downcase
-  end
-
-  def query
-    hash = parse_items_xml(appcmd('list', 'apppool', '/xml', '/config:*', "/name:#{name}"))[0]
-
-    @property_hash.update(hash)
-    @property_hash.dup
   end
 end
