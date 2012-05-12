@@ -56,38 +56,26 @@ Puppet::Type.type(:iis_apppool).provide(:iis_apppool) do
 
   private
   def self.list(name = nil)
-    if name
-      output = appcmd('list', 'apppool', '/xml', '/config:*', "/name:#{name}")
-    else
-      output = appcmd('list', 'apppool', '/xml', '/config:*')
-    end
+    parse_items_xml(appcmd('list', 'apppool', '/xml', '/config:*'))
+  end
 
+  def self.parse_items_xml(output)
     xml = Nokogiri::XML(output)
 
-    hashes = xml.xpath("/appcmd/APPPOOL/add").collect do |resource_xml|
-      hash = xml_to_hash(resource_xml)
+    xml.xpath("/appcmd/APPPOOL/add").collect do |resource_xml|
+      hash = parse_item_xml(resource_xml)
       hash[:provider] = self.name
       hash[:ensure] = :present
       hash
     end
-
-    if name
-      if hashes.length != 0
-        hashes[0]
-      else
-        nil
-      end
-    else
-      hashes
-    end
   end
 
-  def self.xml_to_hash(element, hash = {}, prefix = nil)
+  def self.parse_item_xml(element, hash = {}, prefix = nil)
     element.attributes.each do |attribute_name, attribute_value|
       hash[build_key(prefix, attribute_name).to_sym] = attribute_value
     end
 
-    element.children.each { |child| xml_to_hash(child, hash, build_key(prefix, child.node_name)) }
+    element.children.each { |child| parse_item_xml(child, hash, build_key(prefix, child.node_name)) }
 
     hash
   end
@@ -97,11 +85,7 @@ Puppet::Type.type(:iis_apppool).provide(:iis_apppool) do
   end
 
   def query
-    hash = self.class.list(@resource[:name])
-
-    if hash.nil?
-      return nil
-    end
+    hash = parse_items_xml(appcmd('list', 'apppool', '/xml', '/config:*', "/name:#{name}"))[0]
 
     @property_hash.update(hash)
     @property_hash.dup
