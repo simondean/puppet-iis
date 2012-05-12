@@ -68,9 +68,9 @@ Puppet::Type.type(:iis_apppool).provide(:iis_apppool) do
   #  appcmd 'add', 'apppool', "/name:#{resource[:name]}"
   #end
 
-  def destroy
-    puts "Destroy"
-    appcmd 'delete', 'apppool', resource[:name]
+  #def destroy
+    #puts "Destroy"
+    #appcmd 'delete', 'apppool', resource[:name]
     #  puts "Should #{@resource.should(:ensure)}"
   #  puts "Is #{get(:ensure)}"
   #
@@ -80,7 +80,7 @@ Puppet::Type.type(:iis_apppool).provide(:iis_apppool) do
   #
   #  @property_hash[:ensure] = :absent
   #  appcmd 'delete', 'apppool', "/name:#{resource[:name]}"
-  end
+  #end
 
   #def exists?
   #  properties[:ensure] != :absent
@@ -116,12 +116,7 @@ Puppet::Type.type(:iis_apppool).provide(:iis_apppool) do
 
       @property_hash[:ensure] = :present
     else
-      #puts "delete"
-      #
-      #if exists?
-      #  appcmd 'delete', 'apppool', "/name:#{resource[:name]}"
-      #end
-      #
+      appcmd 'delete', 'apppool', resource[:name]
       #@property_hash[:ensure] = :absent
     end
   end

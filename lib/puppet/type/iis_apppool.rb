@@ -8,9 +8,9 @@ Puppet::Type.newtype(:iis_apppool) do
     #  provider.create
     #end
 
-    newvalue(:absent, :event => :iis_apppool_destroyed) do
-      provider.destroy
-    end
+    newvalue(:absent, :event => :iis_apppool_destroyed) #do
+    #  provider.destroy
+    #end
   end
 
   newparam(:name) do
