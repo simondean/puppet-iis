@@ -4,13 +4,9 @@ Puppet::Type.newtype(:iis_apppool) do
   ensurable do
     desc "Ensures the app pool is present or absent"
 
-    newvalue(:present, :event => :iis_apppool_created) #do
-    #  provider.create
-    #end
+    newvalue(:present, :event => :iis_apppool_created)
 
-    newvalue(:absent, :event => :iis_apppool_destroyed) #do
-    #  provider.destroy
-    #end
+    newvalue(:absent, :event => :iis_apppool_destroyed)
   end
 
   newparam(:name) do
