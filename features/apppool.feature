@@ -4,12 +4,23 @@ Feature: App pools
   I want to manage IIS app pools
   
   Scenario: Create an app pool
-    Given there is no app pool named "TestApppool26200"
+    Given no app pool called "TestApppool9001"
     Given the manifest
       """
-      iis_apppool {"TestApppool26200":
+      iis_apppool {"TestApppool9001":
         ensure => present,
       }
       """
     When the manifest is applied
-    Then there is an app pool named "TestApppool26200"
+    Then the "TestApppool9001" app pool exists
+
+  Scenario: Delete an app pool
+    Given an app pool called "TestApppool9001"
+    Given the manifest
+    """
+      iis_apppool {"TestApppool9002":
+        ensure => absent,
+      }
+      """
+    When the manifest is applied
+    Then the "TestApppool9002" app pool does not exists
