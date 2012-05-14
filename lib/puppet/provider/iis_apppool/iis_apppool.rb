@@ -68,7 +68,7 @@ Puppet::Type.type(:iis_apppool).provide(:iis_apppool) do
   end
 
   def query
-    hash = parse_items_xml(appcmd('list', 'apppool', '/xml', '/config:*', "/name:#{name}"))[0]
+    hash = parse_items_xml(appcmd('list', 'apppool', name, '/xml', '/config:*'))[0]
 
     @property_hash.update(hash)
     @property_hash.dup
