@@ -50,7 +50,17 @@ Puppet::Type.type(:iis_apppool).provide(:iis_apppool) do
   def flush
     if @resource[:ensure] != :absent
       if exists?
-        puts "update"
+        args = ['set', 'apppool', resource[:name]]
+
+        @property_hash.each do |key, value|
+          case key
+            when 'ensure'
+            else
+              args << "/#{key}:#{value}"
+          end
+        end
+
+        appcmd *args
       else
         appcmd 'add', 'apppool', "/name:#{resource[:name]}"
       end

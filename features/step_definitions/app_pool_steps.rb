@@ -42,7 +42,6 @@ def get_apppool_properties(name)
         .gsub("/", "_")
         .downcase
       properties[key] = attribute.value
-      puts "#{key}: #{attribute.value}"
     end
   end
 
