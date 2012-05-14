@@ -40,11 +40,11 @@ task :apppool_properties do
 	
 	xml.xpath("//APPPOOL//*").each do |element|
 		element.attributes.each_key do |key|
-			
-			property = element.path.downcase().gsub('/', '_') + '_'
-			property = property.gsub('_appcmd_apppool_add_', '')
-			property += key.downcase()
-			puts property
+			#property = element.path.downcase().gsub('/', '_') + '_'
+			#property = property.gsub('_appcmd_apppool_add_', '')
+			#property += key.downcase()
+			#puts property
+      puts "#{element.path}@#{key}"
 		end
 	end
 end

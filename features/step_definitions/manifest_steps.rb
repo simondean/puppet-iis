@@ -4,7 +4,7 @@ Given /^the manifest$/ do |text|
   @manifest = text
 end
 
-When /^the manifest is applied$/ do
+When /^puppet applies the manifest$/ do
   manifest_file = Tempfile.new('manifest')
 
   begin
@@ -28,6 +28,6 @@ When /^the manifest is applied$/ do
   end
 end
 
-Then /^changes were applied$/ do
+Then /^puppet has made changes$/ do
   @changes.should == true
 end
