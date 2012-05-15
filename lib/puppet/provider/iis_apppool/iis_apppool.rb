@@ -56,7 +56,7 @@ Puppet::Type.type(:iis_apppool).provide(:iis_apppool) do
           case key
             when 'ensure'
             else
-              args << "/#{key}:#{value}"
+              args << "/#{key.to_s.gsub('_', '.')}:#{value}"
           end
         end
 

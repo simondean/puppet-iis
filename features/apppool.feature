@@ -30,14 +30,17 @@ Feature: App pools
   Scenario: Reconfigure an app pool
     Given an app pool called "PuppetTest"
     And its "autostart" property is set to "false"
+    And its "processmodel_identitytype" property is set to "NetworkService"
     Given the manifest
     """
       iis_apppool {"PuppetTest":
         ensure => present,
-        autostart => true
+        autostart => true,
+        processmodel_identitytype => "ApplicationPoolIdentity"
       }
       """
     When puppet applies the manifest
     Then puppet has made changes
     And puppet has changed the "PuppetTest" app pool
     And puppet has set its "autostart" property to "true"
+    And puppet has set its "processmodel_identitytype" property to "ApplicationPoolIdentity"

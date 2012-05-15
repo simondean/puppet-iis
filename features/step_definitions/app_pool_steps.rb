@@ -22,7 +22,7 @@ end
 def set_apppool_properties(name, properties)
   args = [@appcmd, "set", "apppool", name]
   properties.each do |key, value|
-    args << "/#{key}:#{value}"
+    args << "/#{key.gsub('_', '.')}:#{value}"
   end
   success = system(*args)
   raise "Failed to set app ppool properties.  Exit code #{$?.exitstatus}" unless success
