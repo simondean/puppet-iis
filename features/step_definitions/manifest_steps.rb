@@ -31,3 +31,7 @@ end
 Then /^puppet has made changes$/ do
   @changes.should == true
 end
+
+Then /^puppet has not made changes$/ do
+  @changes.should == false
+end
