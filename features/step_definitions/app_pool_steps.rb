@@ -63,6 +63,7 @@ Given /^its "([^"]*)" property is set to "([^"]*)"$/ do |name, value|
 end
 
 Then /^puppet has created the "([^"]*)" app pool$/ do |name|
+  @apppool_name = name
   apppool_exists?(name).should == true
 end
 

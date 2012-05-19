@@ -33,6 +33,22 @@ Feature: App pools
     Then puppet has made changes
     And puppet has created the "PuppetTest" app pool
 
+  Scenario: Create an app pool with properties
+    Given no app pool called "PuppetTest"
+    Given the manifest
+    """
+      iis_apppool {'PuppetTest':
+        ensure                    => present,
+        autostart                 => false,
+        processmodel_identitytype => 'NetworkService'
+      }
+      """
+    When puppet applies the manifest
+    Then puppet has made changes
+    And puppet has created the "PuppetTest" app pool
+    And puppet has set its "autostart" property to "false"
+    And puppet has set its "processmodel_identitytype" property to "NetworkService"
+
   Scenario: Delete an app pool
     Given an app pool called "PuppetTest"
     Given the manifest
@@ -47,18 +63,18 @@ Feature: App pools
 
   Scenario: Reconfigure an app pool
     Given an app pool called "PuppetTest"
-    And its "autostart" property is set to "false"
-    And its "processmodel_identitytype" property is set to "NetworkService"
+    And its "autostart" property is set to "true"
+    And its "processmodel_identitytype" property is set to "ApplicationPoolIdentity"
     Given the manifest
     """
       iis_apppool {'PuppetTest':
         ensure                    => present,
-        autostart                 => true,
-        processmodel_identitytype => 'ApplicationPoolIdentity'
+        autostart                 => false,
+        processmodel_identitytype => 'NetworkService'
       }
       """
     When puppet applies the manifest
     Then puppet has made changes
     And puppet has changed the "PuppetTest" app pool
-    And puppet has set its "autostart" property to "true"
-    And puppet has set its "processmodel_identitytype" property to "ApplicationPoolIdentity"
+    And puppet has set its "autostart" property to "false"
+    And puppet has set its "processmodel_identitytype" property to "NetworkService"

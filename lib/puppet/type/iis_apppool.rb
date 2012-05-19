@@ -53,6 +53,10 @@ Puppet::Type.newtype(:iis_apppool) do
 	 'cpu_smpaffinitized',
 	 'cpu_smpprocessoraffinitymask',
 	 'cpu_smpprocessoraffinitymask2'].each do |property|
-		newproperty(property.to_sym())
+		newproperty(property.to_sym()) do
+      munge do |value|
+        value.to_s
+      end
+    end
   end
 end
