@@ -1,13 +1,7 @@
 Puppet::Type.newtype(:iis_apppool) do
   @doc = "IIS App Pool"
 
-  ensurable do
-    desc "Ensures the app pool is present or absent"
-
-    newvalue(:present, :event => :iis_apppool_created)
-
-    newvalue(:absent, :event => :iis_apppool_destroyed)
-  end
+  ensurable
 
   newparam(:name) do
     desc "App pool name"
@@ -60,9 +54,5 @@ Puppet::Type.newtype(:iis_apppool) do
 	 'cpu_smpprocessoraffinitymask',
 	 'cpu_smpprocessoraffinitymask2'].each do |property|
 		newproperty(property.to_sym())
-  end
-
-  def exists?
-    provider.exists?
   end
 end

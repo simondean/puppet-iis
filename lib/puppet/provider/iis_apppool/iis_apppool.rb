@@ -10,78 +10,77 @@ Puppet::Type.type(:iis_apppool).provide(:iis_apppool) do
   mk_resource_methods
 
   def self.instances
-    list().collect { |hash| new(hash) }
   end
 
   # Match resources to providers where the resource name matches the provider name
   def self.prefetch(resources)
-    instances().each do |provider|
-      resource = resources[provider.name]
+    resources.each do |name, resource|
+      item = query(name)
 
-      if resource
-        resource.provider = provider
+      if item.nil?
+        resource.provider = new({ :name => name, :ensure => :absent })
+      else
+        item = item.reject do |key|
+          resource.should(key).nil?
+        end
+
+        item[:ensure] = :present
+        resource.provider = new(item)
       end
     end
   end
 
   def exists?
-    begin
-      appcmd("list", "apppool", resource[:name])
-    rescue Puppet::ExecutionFailure
-      if $?.exitstatus == 1
-        return false
-      else
-        raise
-      end
-    else
-      return true
-    end
+    @property_hash[:ensure] != :absent
   end
 
-  def properties
-    if @property_hash.empty?
-      @property_hash = query || {:ensure => :absent}
-      @property_hash[:ensure] = :absent if @property_hash.empty?
-    end
+  def create
+    appcmd 'add', 'apppool', "/name:#{resource[:name]}"
+    @property_hash[:ensure] = :present
+  end
 
-    @property_hash.dup
+  def destroy
+    appcmd 'delete', 'apppool', resource[:name]
+    @property_hash[:ensure] = :absent
   end
 
   def flush
     if @resource[:ensure] != :absent
-      if exists?
+    #  if exists?
         args = ['set', 'apppool', resource[:name]]
 
-        @property_hash.each do |key, value|
-          case key
-            when 'ensure'
-            else
-              args << "/#{key.to_s.gsub('_', '.')}:#{value}"
+        self.class.resource_type.validproperties.each do |property|
+          if property != :ensure
+            value = @property_hash[property]
+            args << "/#{property.to_s.gsub('_', '.')}:#{value}" unless value.nil?
           end
         end
 
-        appcmd *args
-      else
-        appcmd 'add', 'apppool', "/name:#{resource[:name]}"
-      end
+        appcmd *args if args.length > 3
+      #else
+      #  appcmd 'add', 'apppool', "/name:#{resource[:name]}"
+      #end
 
-      @property_hash[:ensure] = :present
-    else
-      appcmd 'delete', 'apppool', resource[:name]
-      @property_hash[:ensure] = :absent
+      #@property_hash[:ensure] = :present
+    #else
+    #  appcmd 'delete', 'apppool', resource[:name]
+    #  @property_hash[:ensure] = :absent
     end
+
+    @property_hash.clear
   end
 
   private
-  def self.list
-    parse_items_xml(appcmd('list', 'apppool', '/xml', '/config:*'))
-  end
-
-  def query
-    hash = parse_items_xml(appcmd('list', 'apppool', name, '/xml', '/config:*'))[0]
-
-    @property_hash.update(hash)
-    @property_hash.dup
+  def self.query(name)
+    begin
+      parse_items_xml(appcmd('list', 'apppool', name, '/xml', '/config:*'))[0]
+    rescue Puppet::ExecutionFailure
+      if $?.exitstatus == 1
+        nil
+      else
+        raise
+      end
+    end
   end
 
   def self.parse_items_xml(output)
@@ -96,8 +95,20 @@ Puppet::Type.type(:iis_apppool).provide(:iis_apppool) do
   end
 
   def self.parse_item_xml(element, hash = {}, prefix = nil)
-    element.attributes.each do |attribute_name, attribute_value|
-      hash[build_key(prefix, attribute_name).to_sym] = attribute_value
+    element.attributes.each do |attribute_name, attribute|
+      attribute_name = build_key(prefix, attribute_name).to_sym
+
+      #case attribute_value
+      #  when "true"
+      #    attribute_value = true
+      #  when "false"
+      #    attribute_value = false
+      #  else
+      #    # Ignored
+      #end
+
+      #puts "#{attribute_name}: #{attribute.value}"
+      hash[attribute_name] = attribute.value
     end
 
     element.children.each { |child| parse_item_xml(child, hash, build_key(prefix, child.node_name)) }
