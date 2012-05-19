@@ -10,22 +10,23 @@ Puppet::Type.type(:iis_apppool).provide(:iis_apppool) do
   mk_resource_methods
 
   def self.instances
+    list().collect do |hash|
+      hash[:ensure] = :present
+      new(hash)
+    end
   end
 
   # Match resources to providers where the resource name matches the provider name
   def self.prefetch(resources)
+    providers = Hash[instances().map { |provider| [provider.name, provider] }]
+
     resources.each do |name, resource|
-      item = query(name)
+      provider = providers[name]
 
-      if item.nil?
-        resource.provider = new({ :name => name, :ensure => :absent })
+      if provider
+        resource.provider = provider
       else
-        item = item.reject do |key|
-          resource.should(key).nil?
-        end
-
-        item[:ensure] = :present
-        resource.provider = new(item)
+        resource.provider = new({ :name => name, :ensure => :absent })
       end
     end
   end
@@ -71,16 +72,8 @@ Puppet::Type.type(:iis_apppool).provide(:iis_apppool) do
   end
 
   private
-  def self.query(name)
-    begin
-      parse_items_xml(appcmd('list', 'apppool', name, '/xml', '/config:*'))[0]
-    rescue Puppet::ExecutionFailure
-      if $?.exitstatus == 1
-        nil
-      else
-        raise
-      end
-    end
+  def self.list
+    parse_items_xml(appcmd('list', 'apppool', '/xml', '/config:*'))
   end
 
   def self.parse_items_xml(output)
@@ -96,19 +89,7 @@ Puppet::Type.type(:iis_apppool).provide(:iis_apppool) do
 
   def self.parse_item_xml(element, hash = {}, prefix = nil)
     element.attributes.each do |attribute_name, attribute|
-      attribute_name = build_key(prefix, attribute_name).to_sym
-
-      #case attribute_value
-      #  when "true"
-      #    attribute_value = true
-      #  when "false"
-      #    attribute_value = false
-      #  else
-      #    # Ignored
-      #end
-
-      #puts "#{attribute_name}: #{attribute.value}"
-      hash[attribute_name] = attribute.value
+      hash[build_key(prefix, attribute_name).to_sym] = attribute.value
     end
 
     element.children.each { |child| parse_item_xml(child, hash, build_key(prefix, child.node_name)) }
