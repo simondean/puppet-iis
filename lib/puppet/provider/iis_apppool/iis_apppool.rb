@@ -26,7 +26,11 @@ Puppet::Type.type(:iis_apppool).provide(:iis_apppool) do
       if provider
         resource.provider = provider
       else
-        resource.provider = new({ :name => name, :ensure => :absent })
+        resource.provider = new(:ensure => :absent)
+        #resource.provider = new({ :name => name, :ensure => :absent })
+        #provider = new(resource)
+        #provider.ensure = :absent
+        #resource.provider = provider
       end
     end
   end
@@ -36,7 +40,17 @@ Puppet::Type.type(:iis_apppool).provide(:iis_apppool) do
   end
 
   def create
-    appcmd 'add', 'apppool', "/name:#{resource[:name]}"
+    args = ['add', 'apppool', "/name:#{resource[:name]}"]
+
+    self.class.resource_type.validproperties.each do |property|
+      if property != :ensure
+        value = resource.should(property)
+        args << "/#{property.to_s.gsub('_', '.')}:#{value}" unless value.nil?
+      end
+    end
+
+    appcmd *args
+
     @property_hash[:ensure] = :present
   end
 
@@ -47,25 +61,16 @@ Puppet::Type.type(:iis_apppool).provide(:iis_apppool) do
 
   def flush
     if @resource[:ensure] != :absent
-    #  if exists?
-        args = ['set', 'apppool', resource[:name]]
+      args = ['set', 'apppool', resource[:name]]
 
-        self.class.resource_type.validproperties.each do |property|
-          if property != :ensure
-            value = @property_hash[property]
-            args << "/#{property.to_s.gsub('_', '.')}:#{value}" unless value.nil?
-          end
+      self.class.resource_type.validproperties.each do |property|
+        if property != :ensure
+          value = @property_hash[property]
+          args << "/#{property.to_s.gsub('_', '.')}:#{value}" unless value.nil?
         end
+      end
 
-        appcmd *args if args.length > 3
-      #else
-      #  appcmd 'add', 'apppool', "/name:#{resource[:name]}"
-      #end
-
-      #@property_hash[:ensure] = :present
-    #else
-    #  appcmd 'delete', 'apppool', resource[:name]
-    #  @property_hash[:ensure] = :absent
+      appcmd *args if args.length > 3
     end
 
     @property_hash.clear
