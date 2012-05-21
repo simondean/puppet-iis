@@ -67,14 +67,29 @@ Then /^puppet has created the "([^"]*)" app pool$/ do |name|
   apppool_exists?(name).should == true
 end
 
+Then /^puppet has changed the "([^"]*)" app pool$/ do |name|
+  @apppool_name = name
+  apppool_exists?(name).should == true
+end
+
+When /^puppet has not changed the "([^"]*)" app pool$/ do |name|
+  @apppool_name = name
+  apppool_exists?(name).should == true
+end
+
+When /^puppet has not created the "([^"]*)" app pool$/ do |name|
+  @apppool_name = name
+  apppool_exists?(name).should == false
+end
+
 Then /^puppet has deleted the "([^"]*)" app pool$/ do |name|
   apppool_exists?(name).should == false
 end
 
-Then /^puppet has changed the "([^"]*)" app pool$/ do |name|
-  @apppool_name = name
+Then /^puppet has set its "([^"]*)" property to "([^"]*)"$/ do |name, value|
+  get_apppool_properties(@apppool_name)[name].should == value
 end
 
-Then /^puppet has set its "([^"]*)" property to "([^"]*)"$/ do |name, value|
+When /^puppet has left its "([^"]*)" property set to "([^"]*)"$/ do |name, value|
   get_apppool_properties(@apppool_name)[name].should == value
 end
