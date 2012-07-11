@@ -11,7 +11,7 @@ When /^puppet applies the manifest$/ do
     manifest_file.write @manifest
     manifest_file.close
 
-    system('bundle', 'exec', 'puppet', 'apply', '--debug', '--detailed-exitcodes', manifest_file.path)
+    system('bundle', 'exec', 'puppet', 'apply', '--debug', '--detailed-exitcodes', '--modulepath', './modules', manifest_file.path)
 
     @changes = false
     @failures = false
