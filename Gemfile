@@ -1,5 +1,6 @@
 source :rubygems
 
+gem "rake"
 gem "sys-admin"
 gem "win32-process"
 gem "win32-dir"
