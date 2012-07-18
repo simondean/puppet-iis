@@ -36,11 +36,11 @@ def get_object_properties(iis_type, name)
 
   properties = {}
 
-  xml.xpath("/appcmd/#{iis_type.upcase}/*/descendant-or-self::*").each do |element|
+  xml.xpath("/appcmd/#{iis_type.upcase}/descendant-or-self::*").each do |element|
 
     element.attributes.each do |key, attribute|
       key = "#{element.path}/#{key}"
-        .gsub(/\/appcmd\/[^\/]+\/[^\/]+\//, "")
+        .gsub(/\/appcmd\/[^\/]+\/([^\/]+\/)?/, "")
         .gsub("/", "_")
         .downcase
       properties[key] = attribute.value
@@ -95,6 +95,14 @@ Then /^puppet has set its "([^"]*)" property to "([^"]*)"$/ do |name, value|
   get_object_properties(@iis_type, @iis_object_name)[name].should == value
 end
 
+Then /^puppet has unset its "([^"]*)" property$/ do |name|
+  get_object_properties(@iis_type, @iis_object_name)[name].should == nil
+end
+
 When /^puppet has left its "([^"]*)" property set to "([^"]*)"$/ do |name, value|
   get_object_properties(@iis_type, @iis_object_name)[name].should == value
+end
+
+When /^puppet has left its "([^"]*)" property unset$/ do |name|
+  get_object_properties(@iis_type, @iis_object_name)[name].should == nil
 end

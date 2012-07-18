@@ -9,6 +9,7 @@ Puppet::Type.type(:iis_apppool).provide :iis_apppool, :parent => Puppet::Provide
 
   mk_resource_methods
 
+  private
   def self.iis_type
     "apppool"
   end

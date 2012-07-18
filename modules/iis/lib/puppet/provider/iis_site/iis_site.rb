@@ -9,6 +9,7 @@ Puppet::Type.type(:iis_site).provide :iis_site, :parent => Puppet::Provider::IIS
 
   mk_resource_methods
 
+  private
   def self.iis_type
     "site"
   end

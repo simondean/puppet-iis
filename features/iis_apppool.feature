@@ -1,4 +1,4 @@
-Feature: App pools
+Feature: IIS App Pools
   In order to manage IIS app pools
   As an ops practitioner
   I want to manage IIS app pools
@@ -12,7 +12,7 @@ Feature: App pools
       iis_apppool {'PuppetTest':
         ensure                    => present,
         autostart                 => true,
-        processmodel_identitytype => 'ApplicationPoolIdentity'
+        processmodel_identitytype => 'ApplicationPoolIdentity',
       }
       """
     When puppet applies the manifest
@@ -26,7 +26,7 @@ Feature: App pools
     Given the manifest
     """
       iis_apppool {'PuppetTest':
-        ensure => absent
+        ensure => absent,
       }
       """
     When puppet applies the manifest
@@ -52,7 +52,7 @@ Feature: App pools
       iis_apppool {'PuppetTest':
         ensure                    => present,
         autostart                 => false,
-        processmodel_identitytype => 'NetworkService'
+        processmodel_identitytype => 'NetworkService',
       }
       """
     When puppet applies the manifest
@@ -82,7 +82,7 @@ Feature: App pools
       iis_apppool {'PuppetTest':
         ensure                    => present,
         autostart                 => false,
-        processmodel_identitytype => 'NetworkService'
+        processmodel_identitytype => 'NetworkService',
       }
       """
     When puppet applies the manifest

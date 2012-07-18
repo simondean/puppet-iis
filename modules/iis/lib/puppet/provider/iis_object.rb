@@ -1,10 +1,6 @@
 require 'nokogiri'
 
 class Puppet::Provider::IISObject < Puppet::Provider
-  def self.iis_type
-    raise Puppet::DevError, "#{self.class} did not override 'iis_type'"
-  end
-
   def self.instances
     list().collect do |hash|
       hash[:ensure] = :present
@@ -32,22 +28,12 @@ class Puppet::Provider::IISObject < Puppet::Provider
   end
 
   def create
-    args = ['add', self.class.iis_type(), "/name:#{resource[:name]}"]
-
-    self.class.resource_type.validproperties.each do |property|
-      if property != :ensure
-        value = resource.should(property)
-        args << "/#{property.to_s.gsub('_', '.')}:#{value}" unless value.nil?
-      end
-    end
-
-    appcmd *args
-
+    execute_create
     @property_hash[:ensure] = :present
   end
 
   def destroy
-    appcmd 'delete', self.class.iis_type(), resource[:name]
+    execute_delete
     @property_hash[:ensure] = :absent
   end
 
@@ -73,6 +59,10 @@ class Puppet::Provider::IISObject < Puppet::Provider
   end
 
   private
+  def self.iis_type
+    raise Puppet::DevError, "#{self.class} did not override 'iis_type'"
+  end
+
   def self.list
     parse_items_xml(appcmd('list', iis_type(), '/xml', '/config:*'))
   end
@@ -100,5 +90,22 @@ class Puppet::Provider::IISObject < Puppet::Provider
 
   def self.build_key(prefix, sub_key)
     prefix ? prefix + '_' + sub_key.downcase : sub_key.downcase
+  end
+
+  def execute_create
+    args = ['add', self.class.iis_type(), "/name:#{resource[:name]}"]
+
+    self.class.resource_type.validproperties.each do |property|
+      if property != :ensure
+        value = resource.should(property)
+        args << "/#{property.to_s.gsub('_', '.')}:#{value}" unless value.nil?
+      end
+    end
+
+    appcmd *args
+  end
+
+  def execute_delete
+    appcmd 'delete', self.class.iis_type(), resource[:name]
   end
 end

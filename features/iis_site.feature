@@ -1,4 +1,4 @@
-Feature: Sites
+Feature: IIS Sites
   In order to manage IIS sites
   As an ops practitioner
   I want to manage IIS sites
@@ -10,9 +10,9 @@ Feature: Sites
     Given the manifest
     """
       iis_site {'PuppetTest':
-        ensure                => present,
-        serverautostart => true,
-		limits_maxbandwidth   => 4294967295
+        ensure               => present,
+        serverautostart      => true,
+		limits_maxbandwidth  => 4294967295,
       }
       """
     When puppet applies the manifest
@@ -26,7 +26,7 @@ Feature: Sites
     Given the manifest
     """
       iis_site {'PuppetTest':
-        ensure => absent
+        ensure => absent,
       }
       """
     When puppet applies the manifest
@@ -52,7 +52,7 @@ Feature: Sites
       iis_site {'PuppetTest':
         ensure              => present,
         serverautostart     => false,
-        limits_maxbandwidth => 1024
+        limits_maxbandwidth => 1024,
       }
       """
     When puppet applies the manifest
@@ -82,7 +82,7 @@ Feature: Sites
       iis_site {'PuppetTest':
         ensure              => present,
         serverautostart     => false,
-        limits_maxbandwidth => 1024
+        limits_maxbandwidth => 1024,
       }
       """
     When puppet applies the manifest
