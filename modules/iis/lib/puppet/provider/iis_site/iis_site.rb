@@ -26,10 +26,12 @@ Puppet::Type.type(:iis_site).provide :iis_site, :parent => Puppet::Provider::IIS
 
   def get_complex_property_arg(name, value)
     case name
-      when "bindings"
+      when :bindings
+        puts "value: #{value}"
+        puts "value.length: #{value.length}"
         value.collect do |binding|
           parts = binding.split('/', 2)
-          "/+binding.[protocol='#{parts[0]}',bindingInformation='#{parts[1]}']"
+          "/+bindings.[protocol='#{parts[0]}',bindingInformation='#{parts[1]}']"
         end
       else
         nil

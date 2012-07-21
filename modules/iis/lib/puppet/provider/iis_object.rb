@@ -23,6 +23,13 @@ class Puppet::Provider::IISObject < Puppet::Provider
     end
   end
 
+  def initialize(*args)
+    super
+
+    # Make a duplicate of the properties so we can compare them during a flush
+    @initial_properties = @property_hash.dup
+  end
+
   def exists?
     @property_hash[:ensure] != :absent
   end
@@ -104,11 +111,15 @@ class Puppet::Provider::IISObject < Puppet::Provider
       if name != :ensure
         value = @resource.should(name)
 
-        unless value.nil?
+        if not value.nil? and value != @initial_properties[name]
           arg = get_complex_property_arg(name, value)
           arg = get_simple_property_arg(name, value) if arg.nil?
 
-          args << arg unless arg.nil?
+          unless arg.nil?
+            args << arg
+            @initial_properties[name] = value
+            @property_hash[name] = value
+          end
         end
       end
     end

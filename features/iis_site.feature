@@ -53,7 +53,7 @@ Feature: IIS Sites
         ensure              => present,
         serverautostart     => false,
         limits_maxbandwidth => 1024,
-        #bindings            => ["http/*:25777:", "http/*:25888:"],
+        bindings            => ["http/*:25777:", "http/*:25888:"],
       }
       """
     When puppet applies the manifest
@@ -61,10 +61,10 @@ Feature: IIS Sites
     And puppet has created the "PuppetTest" "site"
     And puppet has set its "@serverAutoStart" property to "false"
     And puppet has set its "limits/@maxBandwidth" property to "1024"
-    #And puppet has set its "bindings/binding[0]/@protocol" property to "http"
-    #And puppet has set its "bindings/binding[0]/@bindingInformation" property to "25777"
-    #And puppet has set its "bindings/binding[0]/@protocol" property to "http"
-    #And puppet has set its "bindings/binding[0]/@bindingInformation" property to "258888"
+    And puppet has set its "bindings/binding[1]/@protocol" property to "http"
+    And puppet has set its "bindings/binding[1]/@bindingInformation" property to "*:25777:"
+    And puppet has set its "bindings/binding[2]/@protocol" property to "http"
+    And puppet has set its "bindings/binding[2]/@bindingInformation" property to "*:25888:"
 
   Scenario: Delete a site
     Given a "site" called "PuppetTest"
