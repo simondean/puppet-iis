@@ -95,3 +95,59 @@ Feature: IIS Sites
     And puppet has changed the "PuppetTest" "site"
     And puppet has set its "@serverAutoStart" property to "false"
     And puppet has set its "limits/@maxBandwidth" property to "1024"
+
+  Scenario: Adding a binging
+    Given a "site" called "PuppetTest"
+    And it has the property "/+bindings.[protocol='http',bindingInformation='*:25777:']"
+    Given the manifest
+    """
+      iis_site {'PuppetTest':
+        ensure              => present,
+        bindings            => ["http/*:25777:", "http/*:25888:"],
+      }
+      """
+    When puppet applies the manifest
+    Then puppet has made changes
+    And puppet has changed the "PuppetTest" "site"
+    And puppet has set its "bindings/binding[1]/@protocol" property to "http"
+    And puppet has set its "bindings/binding[1]/@bindingInformation" property to "*:25777:"
+    And puppet has set its "bindings/binding[2]/@protocol" property to "http"
+    And puppet has set its "bindings/binding[2]/@bindingInformation" property to "*:25888:"
+
+  Scenario: Removing a binging
+    Given a "site" called "PuppetTest"
+    And it has the property "/+bindings.[protocol='http',bindingInformation='*:25777:']"
+    And it has the property "/+bindings.[protocol='http',bindingInformation='*:25888:']"
+    Given the manifest
+    """
+      iis_site {'PuppetTest':
+        ensure              => present,
+        bindings            => ["http/*:25777:"],
+      }
+      """
+    When puppet applies the manifest
+    Then puppet has made changes
+    And puppet has changed the "PuppetTest" "site"
+    And puppet has set its "bindings/binding[1]/@protocol" property to "http"
+    And puppet has set its "bindings/binding[1]/@bindingInformation" property to "*:25777:"
+    And puppet has unset its "bindings/binding[2]/@protocol" property
+    And puppet has unset its "bindings/binding[2]/@bindingInformation" property
+
+  Scenario: No change to bingings
+    Given a "site" called "PuppetTest"
+    And it has the property "/+bindings.[protocol='http',bindingInformation='*:25777:']"
+    And it has the property "/+bindings.[protocol='http',bindingInformation='*:25888:']"
+    Given the manifest
+    """
+      iis_site {'PuppetTest':
+        ensure              => present,
+        bindings            => ["http/*:25777:", "http/*:25888:"],
+      }
+      """
+    When puppet applies the manifest
+    Then puppet has not made changes
+    And puppet has changed the "PuppetTest" "site"
+    And puppet has set its "bindings/binding[1]/@protocol" property to "http"
+    And puppet has set its "bindings/binding[1]/@bindingInformation" property to "*:25777:"
+    And puppet has set its "bindings/binding[2]/@protocol" property to "http"
+    And puppet has set its "bindings/binding[2]/@bindingInformation" property to "*:25888:"

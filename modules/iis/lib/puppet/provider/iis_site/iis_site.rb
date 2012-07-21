@@ -27,12 +27,26 @@ Puppet::Type.type(:iis_site).provide :iis_site, :parent => Puppet::Provider::IIS
   def get_complex_property_arg(name, value)
     case name
       when :bindings
-        puts "value: #{value}"
-        puts "value.length: #{value.length}"
-        value.collect do |binding|
+        value ||= []
+        initial_value = @initial_properties[name] || []
+
+        unchanged_bindings = value & initial_value
+        bindings_to_add = value - unchanged_bindings
+        bindings_to_remove = initial_value - unchanged_bindings
+
+        args = []
+
+        bindings_to_add.collect do |binding|
           parts = binding.split('/', 2)
-          "/+bindings.[protocol='#{parts[0]}',bindingInformation='#{parts[1]}']"
+          args << "/+bindings.[protocol='#{parts[0]}',bindingInformation='#{parts[1]}']"
         end
+
+        bindings_to_remove.collect do |binding|
+          parts = binding.split('/', 2)
+          args << "/-bindings.[protocol='#{parts[0]}',bindingInformation='#{parts[1]}']"
+        end
+
+        args
       else
         nil
     end

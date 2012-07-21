@@ -29,6 +29,11 @@ def set_object_properties(iis_type, name, properties)
   raise "Failed to set object properties.  Exit code #{$?.exitstatus}" unless success
 end
 
+def set_object_property(iis_type, name, property)
+  success = system(@appcmd, "set", iis_type, name, property)
+  raise "Failed to set object property.  Exit code #{$?.exitstatus}" unless success
+end
+
 def get_object_property(iis_type, name, property)
   output = `#{@appcmd} list #{iis_type} #{name} /xml /config:*`
   raise "Failed to get object properties.  Exit code #{$?.exitstatus}" unless $?.success?
@@ -59,6 +64,10 @@ end
 
 Given /^its "([^"]*)" property is set to "([^"]*)"$/ do |name, value|
   set_object_properties @iis_type, @iis_object_name, { name => value }
+end
+
+Given /^it has the property "([^"]*)"$/ do |property|
+  set_object_property @iis_type, @iis_object_name, property
 end
 
 Then /^puppet has created the "([^"]*)" "([^"]*)"$/ do |name, iis_type|
