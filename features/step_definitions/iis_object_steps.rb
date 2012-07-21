@@ -29,25 +29,21 @@ def set_object_properties(iis_type, name, properties)
   raise "Failed to set object properties.  Exit code #{$?.exitstatus}" unless success
 end
 
-def get_object_properties(iis_type, name)
+def get_object_property(iis_type, name, property)
   output = `#{@appcmd} list #{iis_type} #{name} /xml /config:*`
   raise "Failed to get object properties.  Exit code #{$?.exitstatus}" unless $?.success?
-  xml = Nokogiri::XML(output)
+  xml = Nokogiri::XML(output).at_xpath("/appcmd/*/*")
 
-  properties = {}
+  matches = xml.xpath(property)
 
-  xml.xpath("/appcmd/#{iis_type.upcase}/descendant-or-self::*").each do |element|
-
-    element.attributes.each do |key, attribute|
-      key = "#{element.path}/#{key}"
-        .gsub(/\/appcmd\/[^\/]+\/([^\/]+\/)?/, "")
-        .gsub("/", "_")
-        .downcase
-      properties[key] = attribute.value
-    end
+  case matches.length
+    when 0
+      nil
+    when 1
+      matches.first.value
+    else
+      raise "xpath matched multiple elements"
   end
-
-  properties
 end
 
 Given /^an? "([^"]*)" called "([^"]*)"$/ do |iis_type, name|
@@ -92,17 +88,17 @@ Then /^puppet has deleted the "([^"]*)" "([^"]*)"$/ do |name, iis_type|
 end
 
 Then /^puppet has set its "([^"]*)" property to "([^"]*)"$/ do |name, value|
-  get_object_properties(@iis_type, @iis_object_name)[name].should == value
+  get_object_property(@iis_type, @iis_object_name, name).should == value
 end
 
 Then /^puppet has unset its "([^"]*)" property$/ do |name|
-  get_object_properties(@iis_type, @iis_object_name)[name].should == nil
+  get_object_property(@iis_type, @iis_object_name, name).should == nil
 end
 
 When /^puppet has left its "([^"]*)" property set to "([^"]*)"$/ do |name, value|
-  get_object_properties(@iis_type, @iis_object_name)[name].should == value
+  get_object_property(@iis_type, @iis_object_name, name).should == value
 end
 
 When /^puppet has left its "([^"]*)" property unset$/ do |name|
-  get_object_properties(@iis_type, @iis_object_name)[name].should == nil
+  get_object_property(@iis_type, @iis_object_name, name).should == nil
 end

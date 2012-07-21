@@ -100,4 +100,7 @@ Puppet::Type.newtype(:iis_site) do
       end
     end
   end
+
+  newproperty(:bindings, :array_matching => :all) do
+  end
 end

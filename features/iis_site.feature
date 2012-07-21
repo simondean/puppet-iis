@@ -18,8 +18,8 @@ Feature: IIS Sites
     When puppet applies the manifest
     Then puppet has not made changes
     And puppet has not changed the "PuppetTest" "site"
-    And puppet has left its "serverautostart" property set to "true"
-    And puppet has left its "limits_maxbandwidth" property set to "4294967295"
+    And puppet has left its "@serverAutoStart" property set to "true"
+    And puppet has left its "limits/@maxBandwidth" property set to "4294967295"
 
   Scenario: No changes when absent
     Given no "site" called "PuppetTest"
@@ -53,13 +53,18 @@ Feature: IIS Sites
         ensure              => present,
         serverautostart     => false,
         limits_maxbandwidth => 1024,
+        #bindings            => ["http/*:25777:", "http/*:25888:"],
       }
       """
     When puppet applies the manifest
     Then puppet has made changes
     And puppet has created the "PuppetTest" "site"
-    And puppet has set its "serverautostart" property to "false"
-    And puppet has set its "limits_maxbandwidth" property to "1024"
+    And puppet has set its "@serverAutoStart" property to "false"
+    And puppet has set its "limits/@maxBandwidth" property to "1024"
+    #And puppet has set its "bindings/binding[0]/@protocol" property to "http"
+    #And puppet has set its "bindings/binding[0]/@bindingInformation" property to "25777"
+    #And puppet has set its "bindings/binding[0]/@protocol" property to "http"
+    #And puppet has set its "bindings/binding[0]/@bindingInformation" property to "258888"
 
   Scenario: Delete a site
     Given a "site" called "PuppetTest"
@@ -88,5 +93,5 @@ Feature: IIS Sites
     When puppet applies the manifest
     Then puppet has made changes
     And puppet has changed the "PuppetTest" "site"
-    And puppet has set its "serverautostart" property to "false"
-    And puppet has set its "limits_maxbandwidth" property to "1024"
+    And puppet has set its "@serverAutoStart" property to "false"
+    And puppet has set its "limits/@maxBandwidth" property to "1024"
