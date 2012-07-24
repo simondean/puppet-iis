@@ -59,9 +59,10 @@ class Puppet::Provider::IISObject < Puppet::Provider
   end
 
   def self.extract_items(items_xml)
-    Nokogiri::XML(items_xml).xpath("/appcmd/#{iis_type().upcase}/*").collect do |item_xml|
-      hash = extract_item(item_xml)
+    Nokogiri::XML(items_xml).xpath("/appcmd/#{iis_type().upcase}").collect do |item_xml|
+      hash = extract_item(item_xml.at_xpath("*"))
 
+      hash[:name] = item_xml.attributes["#{iis_type.upcase}.NAME"].value
       hash[:provider] = self.name
       hash[:ensure] = :present
       hash
@@ -78,8 +79,6 @@ class Puppet::Provider::IISObject < Puppet::Provider
       end
     end
 
-    hash[:name] = item_xml.attributes["name"].value
-
     hash.merge! extract_complex_properties(item_xml)
 
     hash
@@ -90,7 +89,11 @@ class Puppet::Provider::IISObject < Puppet::Provider
   end
 
   def execute_create
-    appcmd *(['add', self.class.iis_type(), "/name:#{resource[:name]}"] + get_property_args())
+    appcmd *(['add', self.class.iis_type()] + get_name_args() + get_property_args())
+  end
+
+  def get_name_args()
+    ["/name:#{resource[:name]}"]
   end
 
   def execute_delete

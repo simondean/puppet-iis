@@ -1,7 +1,7 @@
 puppet-iis
 ==========
 
-Puppet module for configuring IIS.  The module is only about 30% complete.  See the Cucumber feature files in the features directory to see what the module can do so far.
+Puppet module for configuring IIS.  The module is only about 35% complete.  See the Cucumber feature files in the features directory to see what the module can do so far.
 
 Tested on:
 

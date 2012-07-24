@@ -24,7 +24,7 @@ When /^puppet applies the manifest$/ do
     raise "puppet apply failed.  Exit code #{$?.exitstatus}" if $?.exitstatus < 0 or $?.exitstatus > 6
     raise "puppet apply generated failures.  Exit code #{$?.exitstatus}" if @failures
   ensure
-    #manifest_file.delete
+    manifest_file.delete
   end
 end
 

@@ -1,7 +1,7 @@
 Feature: IIS Sites
-  In order to manage IIS sites
+  In order to automate the configuration of IIS
   As an ops practitioner
-  I want to manage IIS sites
+  I want to use Puppet to manage IIS sites
 
   Scenario: No changes when present
     Given a "site" called "PuppetTest"

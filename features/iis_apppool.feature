@@ -1,7 +1,7 @@
 Feature: IIS App Pools
-  In order to manage IIS app pools
+  In order to automate the configuration of IIS
   As an ops practitioner
-  I want to manage IIS app pools
+  I want to use Puppet to manage IIS app pools
 
   Scenario: No changes when present
     Given an "apppool" called "PuppetTest"

@@ -32,17 +32,20 @@ task :iis_object_properties do
 	require 'nokogiri'
 	
 	['site', 'app', 'vdir', 'apppool', 'config', 'wp', 'request', 'module', 'backup', 'trace'].each do |iis_type|
-		puts "#{iis_type} properties"
+		puts ":#{iis_type}"
 		
 		command_line = "\"#{File.join(ENV["SystemRoot"], "system32/inetsrv/appcmd.exe")}\" list #{iis_type} /xml /config:*"
 		xml_text = `#{command_line}`
 		
 		xml = Nokogiri::XML(xml_text)
 		
-		xml.xpath("//#{iis_type.upcase}[1]/descendant::*").each do |element|
+		xml.xpath("/appcmd/#{iis_type.upcase}[1]/descendant::*").each do |element|
 			element.attributes.each_key do |key|
-				puts "#{element.path.downcase.gsub('/appcmd/', '').gsub('/', '_').gsub('[', '_').gsub(']', '')}_#{key.downcase}"
+        key = "#{element.path}/#{key}".gsub(/\/appcmd\/[^\/]+\/([^\/]+\/)?/, "").gsub("/", "_").downcase
+				puts "   :#{key},"
 			end
-		end
+    end
+
+    puts ""
 	end
 end
