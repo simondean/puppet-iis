@@ -1,18 +1,22 @@
 require 'nokogiri'
 
 def create_object(object_type, name)
-  args = [@appcmd, "add", object_type]
+  success = system(@appcmd, "add", object_type, "/name:#{name}")
+  raise "Failed to add object.  Exit code #{$?.exitstatus}" unless success
+end
 
-  case object_type.to_sym
-    when :app
-      site_name, path = name.split('/', 2)
-      path = "/#{path}"
-      args << "/site.name:#{site_name}" << "/path:#{path}"
-    else
-      args << "/name:#{name}"
-  end
+def create_app(name)
+  site_name, path = name.split('/', 2)
+  path = "/#{path}"
 
-  success = system(*args)
+  success = system(@appcmd, "add", "app", "/site.name:#{site_name}", "/path:#{path}")
+  raise "Failed to add object.  Exit code #{$?.exitstatus}" unless success
+end
+
+def create_vdir(app_name, name)
+  path = "/" + name.split('/', 2)[1]
+
+  success = system(@appcmd, "add", "vdir", "/app.name:#{app_name}", "/path:#{path}")
   raise "Failed to add object.  Exit code #{$?.exitstatus}" unless success
 end
 
@@ -70,9 +74,22 @@ Given /^an? "([^"]*)" called "([^"]*)"$/ do |object_type, name|
     else
       @object_type = object_type
       @object_name = name
-      delete_object object_type, name
-      create_object object_type, name
+      delete_object @object_type, @object_name
+
+      case object_type.to_sym
+        when :app
+          create_app @object_name
+        else
+          create_object @object_type, @object_name
+      end
   end
+end
+
+Given /^an? "vdir" called "([^"]*)" for "([^"]*)" "app"$/ do |name, app_name|
+  @object_type = "vdir"
+  @object_name = name
+  delete_object @object_type, @object_name
+  create_vdir app_name, @object_name
 end
 
 Given /^no "([^"]*)" called "([^"]*)"$/ do |object_type, name|
