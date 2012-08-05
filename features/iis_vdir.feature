@@ -44,7 +44,8 @@ Feature: IIS Virtual Directories
     Given the manifest
     """
       iis_vdir {'PuppetTest/':
-        ensure => absent,
+        ensure  => absent,
+        iis_app => 'PuppetTest/',
       }
       """
     When puppet applies the manifest
@@ -92,7 +93,8 @@ Feature: IIS Virtual Directories
     Given the manifest
     """
       iis_vdir {'PuppetTest/':
-        ensure => absent,
+        ensure  => absent,
+        iis_app => 'PuppetTest/',
       }
       """
     When puppet applies the manifest

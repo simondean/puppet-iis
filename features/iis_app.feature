@@ -11,7 +11,7 @@ Feature: IIS Apps
     Given a "directory" called "C:\\puppet_test2"
 
   Scenario: No changes when present
-    Given a "app" called "PuppetTest/"
+    Given an "app" called "PuppetTest/"
     And its "applicationpool" property is set to "PuppetTest"
     And its "enabledprotocols" property is set to "http"
     And its "serviceautostartenabled" property is set to "false"
@@ -57,7 +57,8 @@ Feature: IIS Apps
     Given the manifest
     """
       iis_app {'PuppetTest/':
-        ensure => absent,
+        ensure          => absent,
+        applicationpool => 'PuppetTest',
       }
       """
     When puppet applies the manifest
@@ -69,7 +70,8 @@ Feature: IIS Apps
     Given the manifest
     """
       iis_app {'PuppetTest/':
-        ensure => present,
+        ensure          => present,
+        applicationpool => 'PuppetTest',
       }
       """
     When puppet applies the manifest
@@ -109,11 +111,12 @@ Feature: IIS Apps
     And puppet has set its "virtualDirectoryDefaults/@allowSubDirConfig" property to "true"
 
   Scenario: Delete an app
-    Given a "app" called "PuppetTest/"
+    Given an "app" called "PuppetTest/"
     Given the manifest
     """
       iis_app {'PuppetTest/':
-        ensure => absent,
+        ensure          => absent,
+        applicationpool => 'PuppetTest',
       }
       """
     When puppet applies the manifest
@@ -121,7 +124,7 @@ Feature: IIS Apps
     And puppet has deleted the "PuppetTest/" "app"
 
   Scenario: Reconfigure an app
-    Given a "app" called "PuppetTest/"
+    Given an "app" called "PuppetTest/"
     And its "applicationpool" property is set to "PuppetTest2"
     And its "enabledprotocols" property is set to "https"
     And its "serviceautostartenabled" property is set to "true"
