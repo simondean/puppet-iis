@@ -1,9 +1,41 @@
 puppet-iis
 ==========
 
-Puppet module for configuring IIS.  The module is only about 35% complete.  See the Cucumber feature files in the features directory to see what the module can do so far.
+Puppet module for configuring IIS.  Currently it can configure app pools, sites, applications and virtual directories.
 
-Tested on:
+## Pre-requisites
+
+- Windows
+- Puppet installed via the Windows Installer
+- IIS installed
+
+## Example Usage
+
+1. Copy the modules\iis directory into C:\ProgramData\PuppetLabs\puppet\etc\modules, so that you have a C:\ProgramData\PuppetLabs\puppet\etc\modules\iis directory.
+2. Create a iis_example.pp file somewhere on your hard disk else with this contents:
+      iis_apppool {'PuppetTest':
+        ensure          => present,
+      }
+
+      iis_site {'PuppetTest':
+        ensure          => present,
+      }
+
+      iis_app {'PuppetTest/':
+        ensure          => present,
+        applicationpool => 'PuppetTest',
+      }
+
+      iis_vdir {'PuppetTest/':
+        ensure          => present,
+        iis_app         => 'PuppetTest/',
+      }
+3. From your Start Menu run: All Programs\Puppet\Start Command Prompt with Puppet
+4. A Puppet command prompt will open.  Change directory to the directory with your iis_example.pp file in and then run this command:
+      puppet apply --debug iis_example.pp
+
+
+## Tested on:
 
 - Ruby 1.9.2 p290 on Windows 7 64bit.
 
