@@ -7,13 +7,13 @@ Feature: IIS Virtual Directories
     Given a "site" called "PuppetTest"
     Given an "apppool" called "PuppetTest"
     Given an "apppool" called "PuppetTest2"
-    Given a "directory" called "C:\\puppet_test"
-    Given a "directory" called "C:\\puppet_test2"
+    Given a "directory" called "C:\puppet_test"
+    Given a "directory" called "C:\puppet_test2"
     Given an "app" called "PuppetTest/"
 
   Scenario: No changes when present
     Given a "vdir" called "PuppetTest/" for "PuppetTest/" "app"
-    And its "physicalpath" property is set to "C:\\puppet_test"
+    And its "physicalpath" property is set to "C:\puppet_test"
     And its "username" property is set to ""
     And its "password" property is set to ""
     And its "logonmethod" property is set to "ClearText"
@@ -23,7 +23,7 @@ Feature: IIS Virtual Directories
       iis_vdir {'PuppetTest/':
         ensure            => present,
         iis_app           => 'PuppetTest/',
-        physicalpath      => 'C:\\puppet_test',
+        physicalpath      => 'C:\puppet_test',
         username          => '',
         password          => '',
         logonmethod       => 'ClearText',
@@ -33,7 +33,7 @@ Feature: IIS Virtual Directories
     When puppet applies the manifest
     Then puppet has not made changes
     And puppet has not changed the "PuppetTest/" "vdir"
-    And puppet has left its "@physicalPath" property set to "C:\\puppet_test"
+    And puppet has left its "@physicalPath" property set to "C:\puppet_test"
     And puppet has left its "@userName" property set to ""
     And puppet has left its "@password" property set to ""
     And puppet has left its "@logonMethod" property set to "ClearText"
@@ -72,7 +72,7 @@ Feature: IIS Virtual Directories
       iis_vdir {'PuppetTest/':
         ensure            => present,
         iis_app           => 'PuppetTest/',
-        physicalpath      => 'C:\\puppet_test',
+        physicalpath      => 'C:\puppet_test',
         username          => '',
         password          => '',
         logonmethod       => 'ClearText',
@@ -82,7 +82,7 @@ Feature: IIS Virtual Directories
     When puppet applies the manifest
     Then puppet has made changes
     And puppet has created the "PuppetTest/" "vdir"
-    And puppet has set its "@physicalPath" property to "C:\\puppet_test"
+    And puppet has set its "@physicalPath" property to "C:\puppet_test"
     And puppet has set its "@userName" property to ""
     And puppet has set its "@password" property to ""
     And puppet has set its "@logonMethod" property to "ClearText"
@@ -103,7 +103,7 @@ Feature: IIS Virtual Directories
 
   Scenario: Reconfigure an app
     Given a "vdir" called "PuppetTest/" for "PuppetTest/" "app"
-    And its "physicalpath" property is set to "C:\\puppet_test2"
+    And its "physicalpath" property is set to "C:\puppet_test2"
     And its "username" property is set to ""
     And its "password" property is set to ""
     And its "logonmethod" property is set to "Batch"
@@ -113,7 +113,7 @@ Feature: IIS Virtual Directories
       iis_vdir {'PuppetTest/':
         ensure            => present,
         iis_app           => 'PuppetTest/',
-        physicalpath      => 'C:\\puppet_test',
+        physicalpath      => 'C:\puppet_test',
         username          => '',
         password          => '',
         logonmethod       => 'ClearText',
@@ -123,7 +123,7 @@ Feature: IIS Virtual Directories
     When puppet applies the manifest
     Then puppet has made changes
     And puppet has changed the "PuppetTest/" "vdir"
-    And puppet has set its "@physicalPath" property to "C:\\puppet_test"
+    And puppet has set its "@physicalPath" property to "C:\puppet_test"
     And puppet has set its "@userName" property to ""
     And puppet has set its "@password" property to ""
     And puppet has set its "@logonMethod" property to "ClearText"

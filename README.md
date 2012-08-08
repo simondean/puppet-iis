@@ -14,22 +14,46 @@ Puppet module for configuring IIS.  Currently it can configure app pools, sites,
 1. Copy the modules\iis directory into C:\ProgramData\PuppetLabs\puppet\etc\modules, so that you have a C:\ProgramData\PuppetLabs\puppet\etc\modules\iis directory.
 2. Create a iis_example.pp file somewhere on your hard disk else with this contents:
 ```puppet
-      iis_apppool {'PuppetTest':
-        ensure          => present,
+      file {'c:/puppet_iis_demo':
+        ensure          => directory,
       }
 
-      iis_site {'PuppetTest':
-        ensure          => present,
+      file {'c:/puppet_iis_demo/default.aspx':
+        content         =>
+'<%@ Page Language="C#" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Managed by Puppet</title>
+</head>
+<body>
+    <h1>Managed by Puppet</h1>
+
+    <strong>Time:</strong> <%= DateTime.UtcNow.ToString("s") + "Z" %>
+</body>
+</html>'
       }
 
-      iis_app {'PuppetTest/':
-        ensure          => present,
-        applicationpool => 'PuppetTest',
+      iis_apppool {'PuppetIisDemo':
+        ensure                => present,
+        managedpipelinemode   => 'Integrated',
+        managedruntimeversion => 'v2.0',
       }
 
-      iis_vdir {'PuppetTest/':
+      iis_site {'PuppetIisDemo':
         ensure          => present,
-        iis_app         => 'PuppetTest/',
+        bindings        => ["http/*:25999:"],
+      }
+
+      iis_app {'PuppetIisDemo/':
+        ensure          => present,
+        applicationpool => 'PuppetIisDemo',
+      }
+
+      iis_vdir {'PuppetIisDemo/':
+        ensure          => present,
+        iis_app         => 'PuppetIisDemo/',
+        physicalpath    => 'c:\puppet_iis_demo'
       }
 ```
 3. From your Start Menu run: All Programs\Puppet\Start Command Prompt with Puppet

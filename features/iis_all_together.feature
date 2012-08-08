@@ -4,65 +4,89 @@ Feature: IIS All Together
   I want to use Puppet to manage IIS
 
   Scenario: Creating
-    Given no "apppool" called "PuppetTest"
-    Given no "site" called "PuppetTest"
-    Given no "app" called "PuppetTest/"
-    Given no "vdir" called "PuppetTest/"
+    Given no "apppool" called "PuppetIisDemo"
+    Given no "site" called "PuppetIisDemo"
+    Given no "app" called "PuppetIisDemo/"
+    Given no "vdir" called "PuppetIisDemo/"
     Given the manifest
     """
-      iis_apppool {'PuppetTest':
-        ensure          => present,
+      file {'c:/puppet_iis_demo':
+        ensure          => directory,
       }
 
-      iis_site {'PuppetTest':
-        ensure          => present,
+      file {'c:/puppet_iis_demo/default.aspx':
+        content         =>
+'<%@ Page Language="C#" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Managed by Puppet</title>
+</head>
+<body>
+    <h1>Managed by Puppet</h1>
+
+    <strong>Time:</strong> <%= DateTime.UtcNow.ToString("s") + "Z" %>
+</body>
+</html>'
       }
 
-      iis_app {'PuppetTest/':
-        ensure          => present,
-        applicationpool => 'PuppetTest',
+      iis_apppool {'PuppetIisDemo':
+        ensure                => present,
+        managedpipelinemode   => 'Integrated',
+        managedruntimeversion => 'v2.0',
       }
 
-      iis_vdir {'PuppetTest/':
+      iis_site {'PuppetIisDemo':
         ensure          => present,
-        iis_app         => 'PuppetTest/',
+        bindings        => ["http/*:25999:"],
+      }
+
+      iis_app {'PuppetIisDemo/':
+        ensure          => present,
+        applicationpool => 'PuppetIisDemo',
+      }
+
+      iis_vdir {'PuppetIisDemo/':
+        ensure          => present,
+        iis_app         => 'PuppetIisDemo/',
+        physicalpath    => 'c:\puppet_iis_demo'
       }
       """
     When puppet applies the manifest
     Then puppet has made changes
-    And puppet has created the "PuppetTest" "apppool"
-    And puppet has created the "PuppetTest" "site"
-    And puppet has created the "PuppetTest/" "app"
-    And puppet has created the "PuppetTest/" "vdir"
+    And puppet has created the "PuppetIisDemo" "apppool"
+    And puppet has created the "PuppetIisDemo" "site"
+    And puppet has created the "PuppetIisDemo/" "app"
+    And puppet has created the "PuppetIisDemo/" "vdir"
 
   Scenario: Deleting
-    Given an "apppool" called "PuppetTest"
-    Given a "site" called "PuppetTest"
-    Given an "app" called "PuppetTest/"
-    Given a "vdir" called "PuppetTest/" for "PuppetTest/" "app"
+    Given an "apppool" called "PuppetIisDemo"
+    Given a "site" called "PuppetIisDemo"
+    Given an "app" called "PuppetIisDemo/"
+    Given a "vdir" called "PuppetIisDemo/" for "PuppetIisDemo/" "app"
     Given the manifest
     """
-      iis_apppool {'PuppetTest':
+      iis_apppool {'PuppetIisDemo':
         ensure          => absent,
       }
 
-      iis_site {'PuppetTest':
+      iis_site {'PuppetIisDemo':
         ensure          => absent,
       }
 
-      iis_app {'PuppetTest/':
+      iis_app {'PuppetIisDemo/':
         ensure          => absent,
-        applicationpool => 'PuppetTest',
+        applicationpool => 'PuppetIisDemo',
       }
 
-      iis_vdir {'PuppetTest/':
+      iis_vdir {'PuppetIisDemo/':
         ensure          => absent,
-        iis_app         => 'PuppetTest/',
+        iis_app         => 'PuppetIisDemo/',
       }
       """
     When puppet applies the manifest
     Then puppet has made changes
-    And puppet has deleted the "PuppetTest" "apppool"
-    And puppet has deleted the "PuppetTest" "site"
-    And puppet has deleted the "PuppetTest/" "app"
-    And puppet has deleted the "PuppetTest/" "vdir"
+    And puppet has deleted the "PuppetIisDemo" "apppool"
+    And puppet has deleted the "PuppetIisDemo" "site"
+    And puppet has deleted the "PuppetIisDemo/" "app"
+    And puppet has deleted the "PuppetIisDemo/" "vdir"

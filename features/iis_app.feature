@@ -7,8 +7,8 @@ Feature: IIS Apps
     Given a "site" called "PuppetTest"
     Given an "apppool" called "PuppetTest"
     Given an "apppool" called "PuppetTest2"
-    Given a "directory" called "C:\\puppet_test"
-    Given a "directory" called "C:\\puppet_test2"
+    Given a "directory" called "C:\puppet_test"
+    Given a "directory" called "C:\puppet_test2"
 
   Scenario: No changes when present
     Given an "app" called "PuppetTest/"
@@ -17,7 +17,7 @@ Feature: IIS Apps
     And its "serviceautostartenabled" property is set to "false"
     And its "serviceautostartprovider" property is set to ""
     And its "virtualdirectorydefaults_path" property is set to "/"
-    And its "virtualdirectorydefaults_physicalpath" property is set to "C:\\puppet_test"
+    And its "virtualdirectorydefaults_physicalpath" property is set to "C:\puppet_test"
     And its "virtualdirectorydefaults_username" property is set to ""
     And its "virtualdirectorydefaults_password" property is set to ""
     And its "virtualdirectorydefaults_logonmethod" property is set to "ClearText"
@@ -31,7 +31,7 @@ Feature: IIS Apps
         serviceautostartenabled                     => false,
         serviceautostartprovider                    => '',
         virtualdirectorydefaults_path               => '/',
-        virtualdirectorydefaults_physicalpath       => 'C:\\puppet_test',
+        virtualdirectorydefaults_physicalpath       => 'C:\puppet_test',
         virtualdirectorydefaults_username           => '',
         virtualdirectorydefaults_password           => '',
         virtualdirectorydefaults_logonmethod        => 'ClearText',
@@ -46,7 +46,7 @@ Feature: IIS Apps
     And puppet has left its "@serviceAutoStartEnabled" property set to "false"
     And puppet has left its "@serviceAutoStartProvider" property set to ""
     And puppet has left its "virtualDirectoryDefaults/@path" property set to "/"
-    And puppet has left its "virtualDirectoryDefaults/@physicalPath" property set to "C:\\puppet_test"
+    And puppet has left its "virtualDirectoryDefaults/@physicalPath" property set to "C:\puppet_test"
     And puppet has left its "virtualDirectoryDefaults/@userName" property set to ""
     And puppet has left its "virtualDirectoryDefaults/@password" property set to ""
     And puppet has left its "virtualDirectoryDefaults/@logonMethod" property set to "ClearText"
@@ -89,7 +89,7 @@ Feature: IIS Apps
         serviceautostartenabled                     => false,
         serviceautostartprovider                    => '',
         virtualdirectorydefaults_path               => '/',
-        virtualdirectorydefaults_physicalpath       => 'C:\\puppet_test',
+        virtualdirectorydefaults_physicalpath       => 'C:\puppet_test',
         virtualdirectorydefaults_username           => '',
         virtualdirectorydefaults_password           => '',
         virtualdirectorydefaults_logonmethod        => 'ClearText',
@@ -104,7 +104,7 @@ Feature: IIS Apps
     And puppet has set its "@serviceAutoStartEnabled" property to "false"
     And puppet has set its "@serviceAutoStartProvider" property to ""
     And puppet has set its "virtualDirectoryDefaults/@path" property to "/"
-    And puppet has set its "virtualDirectoryDefaults/@physicalPath" property to "C:\\puppet_test"
+    And puppet has set its "virtualDirectoryDefaults/@physicalPath" property to "C:\puppet_test"
     And puppet has set its "virtualDirectoryDefaults/@userName" property to ""
     And puppet has set its "virtualDirectoryDefaults/@password" property to ""
     And puppet has set its "virtualDirectoryDefaults/@logonMethod" property to "ClearText"
@@ -130,7 +130,7 @@ Feature: IIS Apps
     And its "serviceautostartenabled" property is set to "true"
     And its "serviceautostartprovider" property is set to ""
     And its "virtualdirectorydefaults_path" property is set to "/PuppetTest"
-    And its "virtualdirectorydefaults_physicalpath" property is set to "C:\\puppet_test2"
+    And its "virtualdirectorydefaults_physicalpath" property is set to "C:\puppet_test2"
     And its "virtualdirectorydefaults_username" property is set to ""
     And its "virtualdirectorydefaults_password" property is set to ""
     And its "virtualdirectorydefaults_logonmethod" property is set to "Batch"
@@ -144,7 +144,7 @@ Feature: IIS Apps
         serviceautostartenabled                     => false,
         serviceautostartprovider                    => '',
         virtualdirectorydefaults_path               => '/',
-        virtualdirectorydefaults_physicalpath       => 'C:\\puppet_test',
+        virtualdirectorydefaults_physicalpath       => 'C:\puppet_test',
         virtualdirectorydefaults_username           => '',
         virtualdirectorydefaults_password           => '',
         virtualdirectorydefaults_logonmethod        => 'ClearText',
@@ -159,7 +159,7 @@ Feature: IIS Apps
     And puppet has set its "@serviceAutoStartEnabled" property to "false"
     And puppet has set its "@serviceAutoStartProvider" property to ""
     And puppet has set its "virtualDirectoryDefaults/@path" property to "/"
-    And puppet has set its "virtualDirectoryDefaults/@physicalPath" property to "C:\\puppet_test"
+    And puppet has set its "virtualDirectoryDefaults/@physicalPath" property to "C:\puppet_test"
     And puppet has set its "virtualDirectoryDefaults/@userName" property to ""
     And puppet has set its "virtualDirectoryDefaults/@password" property to ""
     And puppet has set its "virtualDirectoryDefaults/@logonMethod" property to "ClearText"
