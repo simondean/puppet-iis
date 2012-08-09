@@ -33,7 +33,7 @@ Feature: IIS App Pools
     Then puppet has not made changes
     And puppet has not created the "PuppetTest" "apppool"
 
-  Scenario: Create an app pool
+  Scenario: Create
     Given no "apppool" called "PuppetTest"
     Given the manifest
     """
@@ -45,7 +45,7 @@ Feature: IIS App Pools
     Then puppet has made changes
     And puppet has created the "PuppetTest" "apppool"
 
-  Scenario: Create an app pool with properties
+  Scenario: Create with properties
     Given no "apppool" called "PuppetTest"
     Given the manifest
     """
@@ -61,7 +61,7 @@ Feature: IIS App Pools
     And puppet has set its "@autoStart" property to "false"
     And puppet has set its "processModel/@identityType" property to "NetworkService"
 
-  Scenario: Delete an app pool
+  Scenario: Delete
     Given an "apppool" called "PuppetTest"
     Given the manifest
     """
@@ -73,7 +73,7 @@ Feature: IIS App Pools
     Then puppet has made changes
     And puppet has deleted the "PuppetTest" "apppool"
 
-  Scenario: Reconfigure an app pool
+  Scenario: Reconfigure
     Given an "apppool" called "PuppetTest"
     And its "autostart" property is set to "true"
     And its "processmodel_identitytype" property is set to "ApplicationPoolIdentity"

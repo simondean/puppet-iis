@@ -65,7 +65,7 @@ Feature: IIS Apps
     Then puppet has not made changes
     And puppet has not created the "PuppetTest/" "app"
 
-  Scenario: Create an app
+  Scenario: Create
     Given no "app" called "PuppetTest/"
     Given the manifest
     """
@@ -78,7 +78,7 @@ Feature: IIS Apps
     Then puppet has made changes
     And puppet has created the "PuppetTest/" "app"
 
-  Scenario: Create an app with properties
+  Scenario: Create with properties
     Given no "app" called "PuppetTest/"
     Given the manifest
     """
@@ -110,7 +110,7 @@ Feature: IIS Apps
     And puppet has set its "virtualDirectoryDefaults/@logonMethod" property to "ClearText"
     And puppet has set its "virtualDirectoryDefaults/@allowSubDirConfig" property to "true"
 
-  Scenario: Delete an app
+  Scenario: Delete
     Given an "app" called "PuppetTest/"
     Given the manifest
     """
@@ -123,7 +123,7 @@ Feature: IIS Apps
     Then puppet has made changes
     And puppet has deleted the "PuppetTest/" "app"
 
-  Scenario: Reconfigure an app
+  Scenario: Reconfigure
     Given an "app" called "PuppetTest/"
     And its "applicationpool" property is set to "PuppetTest2"
     And its "enabledprotocols" property is set to "https"

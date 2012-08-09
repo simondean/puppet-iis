@@ -52,7 +52,7 @@ Feature: IIS Virtual Directories
     Then puppet has not made changes
     And puppet has not created the "PuppetTest/" "vdir"
 
-  Scenario: Create an app
+  Scenario: Create
     Given no "vdir" called "PuppetTest/"
     Given the manifest
     """
@@ -65,7 +65,7 @@ Feature: IIS Virtual Directories
     Then puppet has made changes
     And puppet has created the "PuppetTest/" "vdir"
 
-  Scenario: Create an app with properties
+  Scenario: Create with properties
     Given no "vdir" called "PuppetTest/"
     Given the manifest
     """
@@ -88,7 +88,7 @@ Feature: IIS Virtual Directories
     And puppet has set its "@logonMethod" property to "ClearText"
     And puppet has set its "@allowSubDirConfig" property to "true"
 
-  Scenario: Delete an app
+  Scenario: Delete
     Given a "vdir" called "PuppetTest/" for "PuppetTest/" "app"
     Given the manifest
     """
@@ -101,7 +101,7 @@ Feature: IIS Virtual Directories
     Then puppet has made changes
     And puppet has deleted the "PuppetTest/" "vdir"
 
-  Scenario: Reconfigure an app
+  Scenario: Reconfigure
     Given a "vdir" called "PuppetTest/" for "PuppetTest/" "app"
     And its "physicalpath" property is set to "C:\puppet_test2"
     And its "username" property is set to ""

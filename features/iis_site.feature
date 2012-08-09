@@ -33,7 +33,7 @@ Feature: IIS Sites
     Then puppet has not made changes
     And puppet has not created the "PuppetTest" "site"
 
-  Scenario: Create a site
+  Scenario: Create
     Given no "site" called "PuppetTest"
     Given the manifest
     """
@@ -45,7 +45,7 @@ Feature: IIS Sites
     Then puppet has made changes
     And puppet has created the "PuppetTest" "site"
 
-  Scenario: Create a site with properties
+  Scenario: Create with properties
     Given no "site" called "PuppetTest"
     Given the manifest
     """
@@ -66,7 +66,7 @@ Feature: IIS Sites
     And puppet has set its "bindings/binding[2]/@protocol" property to "http"
     And puppet has set its "bindings/binding[2]/@bindingInformation" property to "*:25888:"
 
-  Scenario: Delete a site
+  Scenario: Delete
     Given a "site" called "PuppetTest"
     Given the manifest
     """
@@ -78,7 +78,7 @@ Feature: IIS Sites
     Then puppet has made changes
     And puppet has deleted the "PuppetTest" "site"
 
-  Scenario: Reconfigure a site
+  Scenario: Reconfigure
     Given a "site" called "PuppetTest"
     And its "serverautostart" property is set to "true"
     And its "limits_maxbandwidth" property is set to "4294967295"
