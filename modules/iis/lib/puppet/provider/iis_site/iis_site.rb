@@ -17,8 +17,8 @@ Puppet::Type.type(:iis_site).provide :iis_site, :parent => Puppet::Provider::IIS
   def self.extract_complex_properties(item_xml)
     bindings = []
 
-    item_xml.xpath("bindings/binding").each do |binding_xml|
-      bindings << "#{binding_xml.attributes["protocol"].value}/#{binding_xml.attributes["bindingInformation"].value}"
+    item_xml.each_element("bindings/binding") do |binding_xml|
+      bindings << "#{binding_xml.attributes["protocol"]}/#{binding_xml.attributes["bindingInformation"]}"
     end
 
     { :bindings => bindings }

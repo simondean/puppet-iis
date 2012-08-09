@@ -1,4 +1,4 @@
-require 'nokogiri'
+require 'rexml/document'
 
 class Puppet::Provider::IISObject < Puppet::Provider
   def self.instances
@@ -59,23 +59,27 @@ class Puppet::Provider::IISObject < Puppet::Provider
   end
 
   def self.extract_items(items_xml)
-    Nokogiri::XML(items_xml).xpath("/appcmd/#{iis_type().upcase}").collect do |item_xml|
-      hash = extract_item(item_xml.at_xpath("*"))
+    items = []
 
-      hash[:name] = item_xml.attributes["#{iis_type.upcase}.NAME"].value
+    REXML::Document.new(items_xml).each_element("/appcmd/#{iis_type().upcase}") do |item_xml|
+      hash = extract_item(item_xml.elements[1])
+
+      hash[:name] = item_xml.attributes["#{iis_type.upcase}.NAME"]
       hash[:provider] = self.name
       hash[:ensure] = :present
-      hash
+      items << hash
     end
+
+    items
   end
 
   def self.extract_item(item_xml)
     hash = {}
 
-    item_xml.xpath("descendant-or-self::*").each do |element|
+    item_xml.each_element("descendant-or-self::*") do |element|
       element.attributes.each do |key, attribute|
-        key = "#{element.path}/#{key}".gsub(/\/appcmd\/[^\/]+\/([^\/]+\/)?/, "").gsub("/", "_").downcase
-        hash[key.to_sym] = attribute.value if resource_type.validproperty? key
+        key = "#{element.xpath}/#{key}".gsub(/\/appcmd\/[^\/]+\/([^\/]+\/)?/, "").gsub("/", "_").downcase
+        hash[key.to_sym] = attribute if resource_type.validproperty? key
       end
     end
 
