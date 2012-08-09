@@ -5,7 +5,7 @@ Puppet::Type.type(:iis_app).provide :iis_app, :parent => Puppet::Provider::IISOb
 
   confine :operatingsystem => :windows
 
-  commands :appcmd => File.join(ENV['SystemRoot'], 'system32/inetsrv/appcmd.exe')
+  commands :appcmd => File.join(ENV['SystemRoot'] || 'c:/windows', 'system32/inetsrv/appcmd.exe')
 
   mk_resource_methods
 
