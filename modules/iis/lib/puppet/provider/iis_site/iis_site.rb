@@ -1,4 +1,4 @@
-require_relative '../iis_object'
+require File.join(File.dirname(__FILE__), '../iis_object')
 
 Puppet::Type.type(:iis_site).provide :iis_site, :parent => Puppet::Provider::IISObject do
 	desc "IIS Site"

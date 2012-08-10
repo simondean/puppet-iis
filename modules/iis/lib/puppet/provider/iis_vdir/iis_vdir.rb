@@ -1,4 +1,4 @@
-require_relative '../iis_object'
+require File.join(File.dirname(__FILE__), '../iis_object')
 
 Puppet::Type.type(:iis_vdir).provide :iis_vdir, :parent => Puppet::Provider::IISObject do
 	desc "IIS Virtual Directory"
