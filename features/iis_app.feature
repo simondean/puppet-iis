@@ -10,8 +10,8 @@ Feature: IIS Apps
     Given a "directory" called "C:\puppet_test"
     Given a "directory" called "C:\puppet_test2"
 
-  Scenario: No changes when present
-    Given an "app" called "PuppetTest/"
+  Scenario Outline: No changes when present
+    Given an "app" called "<iis_app>"
     And its "applicationpool" property is set to "PuppetTest"
     And its "enabledprotocols" property is set to "http"
     And its "serviceautostartenabled" property is set to "false"
@@ -24,7 +24,7 @@ Feature: IIS Apps
     And its "virtualdirectorydefaults_allowsubdirconfig" property is set to "true"
     Given the manifest
     """
-      iis_app {'PuppetTest/':
+      iis_app {'<iis_app>':
         ensure                                      => present,
         applicationpool                             => 'PuppetTest',
         enabledprotocols                            => 'http',
@@ -40,7 +40,7 @@ Feature: IIS Apps
       """
     When puppet applies the manifest
     Then puppet has not made changes
-    And puppet has not changed the "PuppetTest/" "app"
+    And puppet has not changed the "<iis_app>" "app"
     And puppet has left its "@applicationPool" property set to "PuppetTest"
     And puppet has left its "@enabledProtocols" property set to "http"
     And puppet has left its "@serviceAutoStartEnabled" property set to "false"
@@ -51,38 +51,53 @@ Feature: IIS Apps
     And puppet has left its "virtualDirectoryDefaults/@password" property set to ""
     And puppet has left its "virtualDirectoryDefaults/@logonMethod" property set to "ClearText"
     And puppet has left its "virtualDirectoryDefaults/@allowSubDirConfig" property set to "true"
-
-  Scenario: No changes when absent
-    Given no "app" called "PuppetTest/"
+    
+  Examples:
+    | iis_app        |
+    | PuppetTest/    |
+    | PuppetTest/app |
+    
+  Scenario Outline: No changes when absent
+    Given no "app" called "<iis_app>"
     Given the manifest
     """
-      iis_app {'PuppetTest/':
+      iis_app {'<iis_app>':
         ensure          => absent,
         applicationpool => 'PuppetTest',
       }
       """
     When puppet applies the manifest
     Then puppet has not made changes
-    And puppet has not created the "PuppetTest/" "app"
+    And puppet has not created the "<iis_app>" "app"
+    
+  Examples:
+    | iis_app        |
+    | PuppetTest/    |
+    | PuppetTest/app |
 
-  Scenario: Create
-    Given no "app" called "PuppetTest/"
+  Scenario Outline: Create
+    Given no "app" called "<iis_app>"
     Given the manifest
     """
-      iis_app {'PuppetTest/':
+      iis_app {'<iis_app>':
         ensure          => present,
         applicationpool => 'PuppetTest',
       }
       """
     When puppet applies the manifest
     Then puppet has made changes
-    And puppet has created the "PuppetTest/" "app"
+    And puppet has created the "<iis_app>" "app"
+    
+  Examples:
+    | iis_app        |
+    | PuppetTest/    |
+    | PuppetTest/app |
 
-  Scenario: Create with properties
-    Given no "app" called "PuppetTest/"
+  Scenario Outline: Create with properties
+    Given no "app" called "<iis_app>"
     Given the manifest
     """
-      iis_app {'PuppetTest/':
+      iis_app {'<iis_app>':
         ensure                                      => present,
         applicationpool                             => 'PuppetTest',
         enabledprotocols                            => 'http',
@@ -98,7 +113,7 @@ Feature: IIS Apps
       """
     When puppet applies the manifest
     Then puppet has made changes
-    And puppet has created the "PuppetTest/" "app"
+    And puppet has created the "<iis_app>" "app"
     And puppet has set its "@applicationPool" property to "PuppetTest"
     And puppet has set its "@enabledProtocols" property to "http"
     And puppet has set its "@serviceAutoStartEnabled" property to "false"
@@ -109,22 +124,32 @@ Feature: IIS Apps
     And puppet has set its "virtualDirectoryDefaults/@password" property to ""
     And puppet has set its "virtualDirectoryDefaults/@logonMethod" property to "ClearText"
     And puppet has set its "virtualDirectoryDefaults/@allowSubDirConfig" property to "true"
+    
+  Examples:
+    | iis_app        |
+    | PuppetTest/    |
+    | PuppetTest/app |
 
-  Scenario: Delete
-    Given an "app" called "PuppetTest/"
+  Scenario Outline: Delete
+    Given an "app" called "<iis_app>"
     Given the manifest
     """
-      iis_app {'PuppetTest/':
+      iis_app {'<iis_app>':
         ensure          => absent,
         applicationpool => 'PuppetTest',
       }
       """
     When puppet applies the manifest
     Then puppet has made changes
-    And puppet has deleted the "PuppetTest/" "app"
+    And puppet has deleted the "<iis_app>" "app"
+    
+  Examples:
+    | iis_app        |
+    | PuppetTest/    |
+    | PuppetTest/app |
 
-  Scenario: Reconfigure
-    Given an "app" called "PuppetTest/"
+  Scenario Outline: Reconfigure
+    Given an "app" called "<iis_app>"
     And its "applicationpool" property is set to "PuppetTest2"
     And its "enabledprotocols" property is set to "https"
     And its "serviceautostartenabled" property is set to "true"
@@ -137,7 +162,7 @@ Feature: IIS Apps
     And its "virtualdirectorydefaults_allowsubdirconfig" property is set to "false"
     Given the manifest
     """
-      iis_app {'PuppetTest/':
+      iis_app {'<iis_app>':
         ensure                                      => present,
         applicationpool                             => 'PuppetTest',
         enabledprotocols                            => 'http',
@@ -153,7 +178,7 @@ Feature: IIS Apps
       """
     When puppet applies the manifest
     Then puppet has made changes
-    And puppet has changed the "PuppetTest/" "app"
+    And puppet has changed the "<iis_app>" "app"
     And puppet has set its "@applicationPool" property to "PuppetTest"
     And puppet has set its "@enabledProtocols" property to "http"
     And puppet has set its "@serviceAutoStartEnabled" property to "false"
@@ -164,3 +189,8 @@ Feature: IIS Apps
     And puppet has set its "virtualDirectoryDefaults/@password" property to ""
     And puppet has set its "virtualDirectoryDefaults/@logonMethod" property to "ClearText"
     And puppet has set its "virtualDirectoryDefaults/@allowSubDirConfig" property to "true"
+    
+  Examples:
+    | iis_app        |
+    | PuppetTest/    |
+    | PuppetTest/app |

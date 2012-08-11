@@ -38,5 +38,12 @@ Puppet::Type.newtype(:iis_app) do
     [:applicationpool].each do |attribute|
       raise Puppet::Error, "Attribute '#{attribute}' is mandatory" unless self[attribute]
     end
+
+    name = self[:name]
+
+    name = name.chomp('/')
+    name += '/' if name.count('/') == 0
+
+    raise Puppet::Error, "iis_app name should be '#{name}'" unless self[:name] == name
   end
 end

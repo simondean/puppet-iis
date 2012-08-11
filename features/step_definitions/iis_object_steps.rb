@@ -14,8 +14,7 @@ def create_app(name)
 end
 
 def create_vdir(app_name, name)
-  path = "/" + name.split('/', 2)[1]
-
+  path = name[(app_name.chomp('/').length)..-1]
   success = system(@appcmd, "add", "vdir", "/app.name:#{app_name}", "/path:#{path}")
   raise "Failed to add object.  Exit code #{$?.exitstatus}" unless success
 end

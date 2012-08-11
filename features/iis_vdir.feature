@@ -10,9 +10,10 @@ Feature: IIS Virtual Directories
     Given a "directory" called "C:\puppet_test"
     Given a "directory" called "C:\puppet_test2"
     Given an "app" called "PuppetTest/"
+    Given an "app" called "PuppetTest/app"
 
-  Scenario: No changes when present
-    Given a "vdir" called "PuppetTest/" for "PuppetTest/" "app"
+  Scenario Outline: No changes when present
+    Given a "vdir" called "<iis_vdir>" for "<iis_app>" "app"
     And its "physicalpath" property is set to "C:\puppet_test"
     And its "username" property is set to ""
     And its "password" property is set to ""
@@ -20,9 +21,9 @@ Feature: IIS Virtual Directories
     And its "allowsubdirconfig" property is set to "true"
     Given the manifest
     """
-      iis_vdir {'PuppetTest/':
+      iis_vdir {'<iis_vdir>':
         ensure            => present,
-        iis_app           => 'PuppetTest/',
+        iis_app           => '<iis_app>',
         physicalpath      => 'C:\puppet_test',
         username          => '',
         password          => '',
@@ -32,46 +33,64 @@ Feature: IIS Virtual Directories
       """
     When puppet applies the manifest
     Then puppet has not made changes
-    And puppet has not changed the "PuppetTest/" "vdir"
+    And puppet has not changed the "<iis_vdir>" "vdir"
     And puppet has left its "@physicalPath" property set to "C:\puppet_test"
     And puppet has left its "@userName" property set to ""
     And puppet has left its "@password" property set to ""
     And puppet has left its "@logonMethod" property set to "ClearText"
     And puppet has left its "@allowSubDirConfig" property set to "true"
 
-  Scenario: No changes when absent
-    Given no "vdir" called "PuppetTest/"
+  Examples:
+    | iis_app        | iis_vdir        |
+    | PuppetTest/    | PuppetTest/     |
+    | PuppetTest/app | PuppetTest/app/ |
+    | PuppetTest/    | PuppetTest/vdir |
+
+  Scenario Outline: No changes when absent
+    Given no "vdir" called "<iis_vdir>"
     Given the manifest
     """
-      iis_vdir {'PuppetTest/':
+      iis_vdir {'<iis_vdir>':
         ensure  => absent,
-        iis_app => 'PuppetTest/',
+        iis_app => '<iis_app>',
       }
       """
     When puppet applies the manifest
     Then puppet has not made changes
-    And puppet has not created the "PuppetTest/" "vdir"
+    And puppet has not created the "<iis_vdir>" "vdir"
 
-  Scenario: Create
-    Given no "vdir" called "PuppetTest/"
+  Examples:
+    | iis_app        | iis_vdir        |
+    | PuppetTest/    | PuppetTest/     |
+    | PuppetTest/app | PuppetTest/app/ |
+    | PuppetTest/    | PuppetTest/vdir |
+    
+  Scenario Outline: Create
+    Given no "vdir" called "<iis_vdir>"
     Given the manifest
     """
-      iis_vdir {'PuppetTest/':
+      iis_vdir {'<iis_vdir>':
         ensure  => present,
-        iis_app => 'PuppetTest/',
+        iis_app => '<iis_app>',
       }
       """
     When puppet applies the manifest
     Then puppet has made changes
-    And puppet has created the "PuppetTest/" "vdir"
+    And puppet has created the "<iis_vdir>" "vdir"
 
-  Scenario: Create with properties
-    Given no "vdir" called "PuppetTest/"
+  Examples:
+    | iis_app        | iis_vdir        |
+    | PuppetTest/    | PuppetTest/     |
+    | PuppetTest/app | PuppetTest/app/ |
+    | PuppetTest/    | PuppetTest/vdir |
+    
+  Scenario Outline: Create with properties
+    Given no "vdir" called "<iis_vdir>"
     Given the manifest
     """
-      iis_vdir {'PuppetTest/':
+      iis_vdir {'<iis_vdir>':
         ensure            => present,
-        iis_app           => 'PuppetTest/',
+        iis_app           => '<iis_app>',
         physicalpath      => 'C:\puppet_test',
         username          => '',
         password          => '',
@@ -81,28 +100,40 @@ Feature: IIS Virtual Directories
       """
     When puppet applies the manifest
     Then puppet has made changes
-    And puppet has created the "PuppetTest/" "vdir"
+    And puppet has created the "<iis_vdir>" "vdir"
     And puppet has set its "@physicalPath" property to "C:\puppet_test"
     And puppet has set its "@userName" property to ""
     And puppet has set its "@password" property to ""
     And puppet has set its "@logonMethod" property to "ClearText"
     And puppet has set its "@allowSubDirConfig" property to "true"
 
-  Scenario: Delete
-    Given a "vdir" called "PuppetTest/" for "PuppetTest/" "app"
+  Examples:
+    | iis_app        | iis_vdir        |
+    | PuppetTest/    | PuppetTest/     |
+    | PuppetTest/app | PuppetTest/app/ |
+    | PuppetTest/    | PuppetTest/vdir |
+    
+  Scenario Outline: Delete
+    Given a "vdir" called "<iis_vdir>" for "<iis_app>" "app"
     Given the manifest
     """
-      iis_vdir {'PuppetTest/':
+      iis_vdir {'<iis_vdir>':
         ensure  => absent,
-        iis_app => 'PuppetTest/',
+        iis_app => '<iis_app>',
       }
       """
     When puppet applies the manifest
     Then puppet has made changes
-    And puppet has deleted the "PuppetTest/" "vdir"
+    And puppet has deleted the "<iis_vdir>" "vdir"
 
-  Scenario: Reconfigure
-    Given a "vdir" called "PuppetTest/" for "PuppetTest/" "app"
+  Examples:
+    | iis_app        | iis_vdir        |
+    | PuppetTest/    | PuppetTest/     |
+    | PuppetTest/app | PuppetTest/app/ |
+    | PuppetTest/    | PuppetTest/vdir |
+    
+  Scenario Outline: Reconfigure
+    Given a "vdir" called "<iis_vdir>" for "<iis_app>" "app"
     And its "physicalpath" property is set to "C:\puppet_test2"
     And its "username" property is set to ""
     And its "password" property is set to ""
@@ -110,9 +141,9 @@ Feature: IIS Virtual Directories
     And its "allowsubdirconfig" property is set to "false"
     Given the manifest
     """
-      iis_vdir {'PuppetTest/':
+      iis_vdir {'<iis_vdir>':
         ensure            => present,
-        iis_app           => 'PuppetTest/',
+        iis_app           => '<iis_app>',
         physicalpath      => 'C:\puppet_test',
         username          => '',
         password          => '',
@@ -122,9 +153,16 @@ Feature: IIS Virtual Directories
       """
     When puppet applies the manifest
     Then puppet has made changes
-    And puppet has changed the "PuppetTest/" "vdir"
+    And puppet has changed the "<iis_vdir>" "vdir"
     And puppet has set its "@physicalPath" property to "C:\puppet_test"
     And puppet has set its "@userName" property to ""
     And puppet has set its "@password" property to ""
     And puppet has set its "@logonMethod" property to "ClearText"
     And puppet has set its "@allowSubDirConfig" property to "true"
+
+  Examples:
+    | iis_app        | iis_vdir        |
+    | PuppetTest/    | PuppetTest/     |
+    | PuppetTest/app | PuppetTest/app/ |
+    | PuppetTest/    | PuppetTest/vdir |
+    
