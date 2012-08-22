@@ -3,6 +3,8 @@ puppet-iis
 
 Puppet module for configuring IIS.  Currently it can configure app pools, sites, applications and virtual directories.
 
+The module is available from: http://forge.puppetlabs.com/simondean/iis
+
 ## Pre-requisites
 
 - Windows
@@ -63,9 +65,9 @@ Puppet module for configuring IIS.  Currently it can configure app pools, sites,
 
 ## Tested on:
 
-- Ruby 1.9.2 p290 on Windows 7 64bit.
+- Tested against the Windows installer version of Puppet on Windows 7 64bit.  
 
-Puppet is not compatible with Ruby 1.9.3 at the moment.  It produces the error: "maxgroups=() function is unimplemented on this machine"
+If using the rake build scipt, you need to use Ruby 1.9.2
 
 
 ## Copyright
