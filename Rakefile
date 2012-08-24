@@ -1,9 +1,8 @@
 require 'bundler/setup'
 
-require 'puppet-lint/tasks/puppet-lint'
 require 'rspec/core/rake_task'
 
-task :default => [:spec, :lint, :smoke_test]
+task :default => [:spec, :smoke_test]
 
 RSpec::Core::RakeTask.new(:spec)
 

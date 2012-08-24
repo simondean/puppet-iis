@@ -4,7 +4,7 @@ Feature: IIS App Pools
   I want to use Puppet to manage IIS app pools
 
   Scenario: No changes when present
-    Given an "apppool" called "PuppetTest"
+    Given an apppool called "PuppetTest"
     And its "autostart" property is set to "true"
     And its "processmodel_identitytype" property is set to "ApplicationPoolIdentity"
     Given the manifest
@@ -17,12 +17,12 @@ Feature: IIS App Pools
       """
     When puppet applies the manifest
     Then puppet has not made changes
-    And puppet has not changed the "PuppetTest" "apppool"
+    And puppet has not changed the "PuppetTest" apppool
     And puppet has left its "@autoStart" property set to "true"
     And puppet has left its "processModel/@identityType" property set to "ApplicationPoolIdentity"
 
   Scenario: No changes when absent
-    Given no "apppool" called "PuppetTest"
+    Given no apppool called "PuppetTest"
     Given the manifest
     """
       iis_apppool {'PuppetTest':
@@ -31,10 +31,10 @@ Feature: IIS App Pools
       """
     When puppet applies the manifest
     Then puppet has not made changes
-    And puppet has not created the "PuppetTest" "apppool"
+    And puppet has not created the "PuppetTest" apppool
 
   Scenario: Create
-    Given no "apppool" called "PuppetTest"
+    Given no apppool called "PuppetTest"
     Given the manifest
     """
       iis_apppool {'PuppetTest':
@@ -43,10 +43,10 @@ Feature: IIS App Pools
       """
     When puppet applies the manifest
     Then puppet has made changes
-    And puppet has created the "PuppetTest" "apppool"
+    And puppet has created the "PuppetTest" apppool
 
   Scenario: Create with properties
-    Given no "apppool" called "PuppetTest"
+    Given no apppool called "PuppetTest"
     Given the manifest
     """
       iis_apppool {'PuppetTest':
@@ -57,12 +57,12 @@ Feature: IIS App Pools
       """
     When puppet applies the manifest
     Then puppet has made changes
-    And puppet has created the "PuppetTest" "apppool"
+    And puppet has created the "PuppetTest" apppool
     And puppet has set its "@autoStart" property to "false"
     And puppet has set its "processModel/@identityType" property to "NetworkService"
 
   Scenario: Delete
-    Given an "apppool" called "PuppetTest"
+    Given an apppool called "PuppetTest"
     Given the manifest
     """
       iis_apppool {'PuppetTest':
@@ -71,10 +71,10 @@ Feature: IIS App Pools
       """
     When puppet applies the manifest
     Then puppet has made changes
-    And puppet has deleted the "PuppetTest" "apppool"
+    And puppet has deleted the "PuppetTest" apppool
 
   Scenario: Reconfigure
-    Given an "apppool" called "PuppetTest"
+    Given an apppool called "PuppetTest"
     And its "autostart" property is set to "true"
     And its "processmodel_identitytype" property is set to "ApplicationPoolIdentity"
     Given the manifest
@@ -87,6 +87,6 @@ Feature: IIS App Pools
       """
     When puppet applies the manifest
     Then puppet has made changes
-    And puppet has changed the "PuppetTest" "apppool"
+    And puppet has changed the "PuppetTest" apppool
     And puppet has set its "@autoStart" property to "false"
     And puppet has set its "processModel/@identityType" property to "NetworkService"

@@ -66,32 +66,27 @@ def get_object_property(object_type, name, property)
   end
 end
 
-Given /^an? "([^"]*)" called "([^"]*)"$/ do |object_type, name|
-  case object_type.to_sym
-    when :directory
-      FileUtils.mkdir_p name
-    else
-      @object_type = object_type
-      @object_name = name
-      delete_object @object_type, @object_name
+Given /^an? (app|apppool|site|vdir) called "([^"]*)"$/ do |object_type, name|
+  @object_type = object_type
+  @object_name = name
+  delete_object @object_type, @object_name
 
-      case object_type.to_sym
-        when :app
-          create_app @object_name
-        else
-          create_object @object_type, @object_name
-      end
+  case object_type.to_sym
+    when :app
+      create_app @object_name
+    else
+      create_object @object_type, @object_name
   end
 end
 
-Given /^an? "vdir" called "([^"]*)" for "([^"]*)" "app"$/ do |name, app_name|
+Given /^a vdir called "([^"]*)" for "([^"]*)" app$/ do |name, app_name|
   @object_type = "vdir"
   @object_name = name
   delete_object @object_type, @object_name
   create_vdir app_name, @object_name
 end
 
-Given /^no "([^"]*)" called "([^"]*)"$/ do |object_type, name|
+Given /^no (app|apppool|site|vdir) called "([^"]*)"$/ do |object_type, name|
   delete_object object_type, name
 end
 
@@ -103,29 +98,29 @@ Given /^it has the property "([^"]*)"$/ do |property|
   set_object_property @object_type, @object_name, property
 end
 
-Then /^puppet has created the "([^"]*)" "([^"]*)"$/ do |name, object_type|
+Then /^puppet has created the "([^"]*)" (app|apppool|site|vdir)$/ do |name, object_type|
   @object_type = object_type
   @object_name = name
   object_exists?(object_type, name).should == true
 end
 
-Then /^puppet has changed the "([^"]*)" "([^"]*)"$/ do |name, object_type|
+Then /^puppet has changed the "([^"]*)" (app|apppool|site|vdir)$/ do |name, object_type|
   @object_type = object_type
   @object_name = name
   object_exists?(object_type, name).should == true
 end
 
-When /^puppet has not changed the "([^"]*)" "([^"]*)"$/ do |name, object_type|
+When /^puppet has not changed the "([^"]*)" (app|apppool|site|vdir)$/ do |name, object_type|
   @object_type = object_type
   @object_name = name
   object_exists?(object_type, name).should == true
 end
 
-When /^puppet has not created the "([^"]*)" "([^"]*)"$/ do |name, object_type|
+When /^puppet has not created the "([^"]*)" (app|apppool|site|vdir)$/ do |name, object_type|
   object_exists?(object_type, name).should == false
 end
 
-Then /^puppet has deleted the "([^"]*)" "([^"]*)"$/ do |name, object_type|
+Then /^puppet has deleted the "([^"]*)" (app|apppool|site|vdir)$/ do |name, object_type|
   object_exists?(object_type, name).should == false
 end
 

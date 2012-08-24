@@ -1,10 +1,11 @@
 require File.join(File.dirname(__FILE__), '../iis_object')
 
-Puppet::Type.type(:iis_site).provide :iis_site, :parent => Puppet::Provider::IISObject do
+Puppet::Type.type(:iis_site).provide(:iis_site, :parent => Puppet::Provider::IISObject) do
 	desc "IIS Site"
 
-  confine :operatingsystem => :windows
-  
+  confine     :operatingsystem => :windows
+  defaultfor  :operatingsystem => :windows
+
   commands :appcmd => File.join(ENV['SystemRoot'] || 'c:/windows', 'system32/inetsrv/appcmd.exe')
 
   mk_resource_methods

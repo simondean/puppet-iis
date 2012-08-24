@@ -4,14 +4,14 @@ Feature: IIS Apps
   I want to use Puppet to manage IIS apps
 
   Background:
-    Given a "site" called "PuppetTest"
-    Given an "apppool" called "PuppetTest"
-    Given an "apppool" called "PuppetTest2"
-    Given a "directory" called "C:\puppet_test"
-    Given a "directory" called "C:\puppet_test2"
+    Given a site called "PuppetTest"
+    Given an apppool called "PuppetTest"
+    Given an apppool called "PuppetTest2"
+    Given a directory called "C:\puppet_test"
+    Given a directory called "C:\puppet_test2"
 
   Scenario Outline: No changes when present
-    Given an "app" called "<iis_app>"
+    Given an app called "<iis_app>"
     And its "applicationpool" property is set to "PuppetTest"
     And its "enabledprotocols" property is set to "http"
     And its "serviceautostartenabled" property is set to "false"
@@ -40,7 +40,7 @@ Feature: IIS Apps
       """
     When puppet applies the manifest
     Then puppet has not made changes
-    And puppet has not changed the "<iis_app>" "app"
+    And puppet has not changed the "<iis_app>" app
     And puppet has left its "@applicationPool" property set to "PuppetTest"
     And puppet has left its "@enabledProtocols" property set to "http"
     And puppet has left its "@serviceAutoStartEnabled" property set to "false"
@@ -58,7 +58,7 @@ Feature: IIS Apps
     | PuppetTest/app |
     
   Scenario Outline: No changes when absent
-    Given no "app" called "<iis_app>"
+    Given no app called "<iis_app>"
     Given the manifest
     """
       iis_app {'<iis_app>':
@@ -68,7 +68,7 @@ Feature: IIS Apps
       """
     When puppet applies the manifest
     Then puppet has not made changes
-    And puppet has not created the "<iis_app>" "app"
+    And puppet has not created the "<iis_app>" app
     
   Examples:
     | iis_app        |
@@ -76,7 +76,7 @@ Feature: IIS Apps
     | PuppetTest/app |
 
   Scenario Outline: Create
-    Given no "app" called "<iis_app>"
+    Given no app called "<iis_app>"
     Given the manifest
     """
       iis_app {'<iis_app>':
@@ -86,7 +86,7 @@ Feature: IIS Apps
       """
     When puppet applies the manifest
     Then puppet has made changes
-    And puppet has created the "<iis_app>" "app"
+    And puppet has created the "<iis_app>" app
     
   Examples:
     | iis_app        |
@@ -94,7 +94,7 @@ Feature: IIS Apps
     | PuppetTest/app |
 
   Scenario Outline: Create with properties
-    Given no "app" called "<iis_app>"
+    Given no app called "<iis_app>"
     Given the manifest
     """
       iis_app {'<iis_app>':
@@ -113,7 +113,7 @@ Feature: IIS Apps
       """
     When puppet applies the manifest
     Then puppet has made changes
-    And puppet has created the "<iis_app>" "app"
+    And puppet has created the "<iis_app>" app
     And puppet has set its "@applicationPool" property to "PuppetTest"
     And puppet has set its "@enabledProtocols" property to "http"
     And puppet has set its "@serviceAutoStartEnabled" property to "false"
@@ -131,7 +131,7 @@ Feature: IIS Apps
     | PuppetTest/app |
 
   Scenario Outline: Delete
-    Given an "app" called "<iis_app>"
+    Given an app called "<iis_app>"
     Given the manifest
     """
       iis_app {'<iis_app>':
@@ -141,7 +141,7 @@ Feature: IIS Apps
       """
     When puppet applies the manifest
     Then puppet has made changes
-    And puppet has deleted the "<iis_app>" "app"
+    And puppet has deleted the "<iis_app>" app
     
   Examples:
     | iis_app        |
@@ -149,7 +149,7 @@ Feature: IIS Apps
     | PuppetTest/app |
 
   Scenario Outline: Reconfigure
-    Given an "app" called "<iis_app>"
+    Given an app called "<iis_app>"
     And its "applicationpool" property is set to "PuppetTest2"
     And its "enabledprotocols" property is set to "https"
     And its "serviceautostartenabled" property is set to "true"
@@ -178,7 +178,7 @@ Feature: IIS Apps
       """
     When puppet applies the manifest
     Then puppet has made changes
-    And puppet has changed the "<iis_app>" "app"
+    And puppet has changed the "<iis_app>" app
     And puppet has set its "@applicationPool" property to "PuppetTest"
     And puppet has set its "@enabledProtocols" property to "http"
     And puppet has set its "@serviceAutoStartEnabled" property to "false"
