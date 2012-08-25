@@ -20,6 +20,7 @@ Puppet::Type.newtype(:iis_site) do
    :logfile_truncatesize,
    :logfile_localtimerollover,
    :logfile_enabled,
+   :physicalpath,
    :tracefailedrequestslogging_enabled,
    :tracefailedrequestslogging_directory,
    :tracefailedrequestslogging_maxlogfiles,
