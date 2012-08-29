@@ -138,7 +138,6 @@ class Puppet::Provider::IISObject < Puppet::Provider
   end
 
   def get_simple_property_arg(name, value)
-    value = "\"#{value.gsub('"', '\\"')}\"" if value.include?(' ') || value.include?('"')
     "/#{name.to_s.gsub('_', '.')}:#{value}"
   end
 end

@@ -9,6 +9,7 @@ Feature: IIS Virtual Directories
     Given an apppool called "PuppetTest2"
     Given a directory called "C:\puppet_test"
     Given a directory called "C:\puppet_test2"
+    Given a directory called "C:\puppet test with spaces"
     Given an app called "PuppetTest/"
     Given an app called "PuppetTest/app"
 
@@ -113,6 +114,35 @@ Feature: IIS Virtual Directories
     | PuppetTest/app | PuppetTest/app/ |
     | PuppetTest/    | PuppetTest/vdir |
     
+  Scenario Outline: Create with spaces
+    Given no vdir called "<iis_vdir>"
+    Given the manifest
+    """
+      iis_vdir {'<iis_vdir>':
+        ensure            => present,
+        iis_app           => '<iis_app>',
+        physicalpath      => 'C:\puppet test with spaces',
+        username          => '',
+        password          => '',
+        logonmethod       => 'ClearText',
+        allowsubdirconfig => true,
+      }
+      """
+    When puppet applies the manifest
+    Then puppet has made changes
+    And puppet has created the "<iis_vdir>" vdir
+    And puppet has set its "@physicalPath" property to "C:\puppet test with spaces"
+    And puppet has set its "@userName" property to ""
+    And puppet has set its "@password" property to ""
+    And puppet has set its "@logonMethod" property to "ClearText"
+    And puppet has set its "@allowSubDirConfig" property to "true"
+
+  Examples:
+    | iis_app        | iis_vdir        |
+    | PuppetTest/    | PuppetTest/     |
+    | PuppetTest/app | PuppetTest/app/ |
+    | PuppetTest/    | PuppetTest/vdir |
+
   Scenario Outline: Delete
     Given a vdir called "<iis_vdir>" for "<iis_app>" app
     Given the manifest
