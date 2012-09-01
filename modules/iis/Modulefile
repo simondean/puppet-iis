@@ -1,5 +1,5 @@
 name 'simondean-iis'
-version '0.1.1'
+version '0.1.2'
 summary 'IIS module. Configures app pools, sites, applications and virtual directories.'
 description 'IIS module. Configures app pools, sites, applications and virtual directories.'
 project_page 'https://github.com/simondean/puppet-iis'
