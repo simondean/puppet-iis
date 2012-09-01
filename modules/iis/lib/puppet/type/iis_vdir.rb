@@ -1,17 +1,7 @@
+require File.join(File.dirname(__FILE__), 'iis/iis_file_system_path_property')
+
 Puppet::Type.newtype(:iis_vdir) do
   @doc = "IIS Virtual Directory"
-
-  class IisProperty < Puppet::Property
-    munge do |value|
-      value.to_s
-    end
-  end
-
-  class IisPhysicalPathProperty < IisProperty
-    def insync?(is)
-      self.is_to_s(is).casecmp(self.should_to_s(@should).gsub('/', '\\')) == 0
-    end
-  end
 
   ensurable
 
@@ -23,25 +13,27 @@ Puppet::Type.newtype(:iis_vdir) do
 
   newparam(:iis_app) do
     desc "Path of the app the virtual directory is under"
+
+    isrequired
   end
 
-  newproperty(:physicalpath, :parent => IisPhysicalPathProperty) do
+  newproperty(:physicalpath, :parent => Puppet::IisFileSystemPathProperty) do
     desc "Physical path"
   end
 
-  newproperty(:logonmethod, :parent => IisProperty) do
+  newproperty(:logonmethod, :parent => Puppet::IisProperty) do
     desc "Logon method for the physical path"
   end
 
-  newproperty(:username, :parent => IisProperty) do
+  newproperty(:username, :parent => Puppet::IisProperty) do
     desc "User name that can access the physical path"
   end
 
-  newproperty(:password, :parent => IisProperty) do
+  newproperty(:password, :parent => Puppet::IisProperty) do
     desc "Password for the user name"
   end
 
-  newproperty(:allowsubdirconfig, :parent => IisProperty) do
+  newproperty(:allowsubdirconfig, :parent => Puppet::IisProperty) do
     desc "Controls whether IIS will load just the Web.config file in the physical path (false) or also the Web.config files in the sub-directories of the physical path (true)"
   end
 
@@ -54,10 +46,6 @@ Puppet::Type.newtype(:iis_vdir) do
   end
 
   validate do
-    [:iis_app].each do |attribute|
-      raise Puppet::Error, "Attribute '#{attribute}' is mandatory" unless self[attribute]
-    end
-
     iis_app = self[:iis_app]
     name = self[:name]
 

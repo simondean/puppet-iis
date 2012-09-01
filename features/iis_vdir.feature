@@ -47,34 +47,6 @@ Feature: IIS Virtual Directories
     | Puppet Test/app | Puppet Test/app/ |
     | Puppet Test/    | Puppet Test/vdir |
 
-  Scenario Outline: No changes when present with forward slash in physical path
-    Given a vdir called "<iis_vdir>" for "<iis_app>" app
-    And its "physicalpath" property is set to "C:\puppet_test"
-    And its "username" property is set to ""
-    And its "password" property is set to ""
-    And its "logonmethod" property is set to "ClearText"
-    And its "allowsubdirconfig" property is set to "true"
-    Given the manifest
-    """
-      iis_vdir {'<iis_vdir>':
-        ensure            => present,
-        iis_app           => '<iis_app>',
-        physicalpath      => 'C:/puppet_test',
-        username          => '',
-        password          => '',
-        logonmethod       => 'ClearText',
-        allowsubdirconfig => true,
-      }
-      """
-    When puppet applies the manifest
-    Then puppet has not made changes
-    And puppet has not changed the "<iis_vdir>" vdir
-    And puppet has left its "@physicalPath" property set to "C:\puppet_test"
-    And puppet has left its "@userName" property set to ""
-    And puppet has left its "@password" property set to ""
-    And puppet has left its "@logonMethod" property set to "ClearText"
-    And puppet has left its "@allowSubDirConfig" property set to "true"
-
   Examples:
     | iis_app        | iis_vdir        |
     | Puppet Test/    | Puppet Test/     |
@@ -166,35 +138,6 @@ Feature: IIS Virtual Directories
     Then puppet has made changes
     And puppet has created the "<iis_vdir>" vdir
     And puppet has set its "@physicalPath" property to "C:\puppet test with spaces"
-    And puppet has set its "@userName" property to ""
-    And puppet has set its "@password" property to ""
-    And puppet has set its "@logonMethod" property to "ClearText"
-    And puppet has set its "@allowSubDirConfig" property to "true"
-
-  Examples:
-    | iis_app        | iis_vdir        |
-    | Puppet Test/    | Puppet Test/     |
-    | Puppet Test/app | Puppet Test/app/ |
-    | Puppet Test/    | Puppet Test/vdir |
-
-  Scenario Outline: Create with forward slash in physical path
-    Given no vdir called "<iis_vdir>"
-    Given the manifest
-    """
-      iis_vdir {'<iis_vdir>':
-        ensure            => present,
-        iis_app           => '<iis_app>',
-        physicalpath      => 'C:/puppet_test',
-        username          => '',
-        password          => '',
-        logonmethod       => 'ClearText',
-        allowsubdirconfig => true,
-      }
-      """
-    When puppet applies the manifest
-    Then puppet has made changes
-    And puppet has created the "<iis_vdir>" vdir
-    And puppet has set its "@physicalPath" property to "C:\puppet_test"
     And puppet has set its "@userName" property to ""
     And puppet has set its "@password" property to ""
     And puppet has set its "@logonMethod" property to "ClearText"

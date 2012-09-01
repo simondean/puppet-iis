@@ -1,11 +1,7 @@
+require File.join(File.dirname(__FILE__), 'iis/iis_file_system_path_property')
+
 Puppet::Type.newtype(:iis_apppool) do
   @doc = "IIS App Pool"
-
-  class IisProperty < Puppet::Property
-    munge do |value|
-      value.to_s
-    end
-  end
 
   ensurable
 
@@ -13,187 +9,187 @@ Puppet::Type.newtype(:iis_apppool) do
     desc "App pool name"
   end
 
-  newproperty(:queuelength, :parent => IisProperty) do
+  newproperty(:queuelength, :parent => Puppet::IisProperty) do
     desc ""
   end
 
-  newproperty(:autostart, :parent => IisProperty) do
+  newproperty(:autostart, :parent => Puppet::IisProperty) do
     desc ""
   end
 
-  newproperty(:enable32bitapponwin64, :parent => IisProperty) do
+  newproperty(:enable32bitapponwin64, :parent => Puppet::IisProperty) do
     desc ""
   end
 
-  newproperty(:managedruntimeversion, :parent => IisProperty) do
+  newproperty(:managedruntimeversion, :parent => Puppet::IisProperty) do
     desc ""
   end
 
-  newproperty(:managedruntimeloader, :parent => IisProperty) do
+  newproperty(:managedruntimeloader, :parent => Puppet::IisProperty) do
     desc ""
   end
 
-  newproperty(:enableconfigurationoverride, :parent => IisProperty) do
+  newproperty(:enableconfigurationoverride, :parent => Puppet::IisProperty) do
     desc ""
   end
 
-  newproperty(:managedpipelinemode, :parent => IisProperty) do
+  newproperty(:managedpipelinemode, :parent => Puppet::IisProperty) do
     desc ""
   end
 
-  newproperty(:clrconfigfile, :parent => IisProperty) do
+  newproperty(:clrconfigfile, :parent => Puppet::IisProperty) do
     desc ""
   end
 
-  newproperty(:passanonymoustoken, :parent => IisProperty) do
+  newproperty(:passanonymoustoken, :parent => Puppet::IisProperty) do
     desc ""
   end
 
-  newproperty(:startmode, :parent => IisProperty) do
+  newproperty(:startmode, :parent => Puppet::IisProperty) do
     desc ""
   end
 
-  newproperty(:processmodel_identitytype, :parent => IisProperty) do
+  newproperty(:processmodel_identitytype, :parent => Puppet::IisProperty) do
     desc ""
   end
 
-  newproperty(:processmodel_username, :parent => IisProperty) do
+  newproperty(:processmodel_username, :parent => Puppet::IisProperty) do
     desc ""
   end
 
-  newproperty(:processmodel_password, :parent => IisProperty) do
+  newproperty(:processmodel_password, :parent => Puppet::IisProperty) do
     desc ""
   end
 
-  newproperty(:processmodel_loaduserprofile, :parent => IisProperty) do
+  newproperty(:processmodel_loaduserprofile, :parent => Puppet::IisProperty) do
     desc ""
   end
 
-  newproperty(:processmodel_setprofileenvironment, :parent => IisProperty) do
+  newproperty(:processmodel_setprofileenvironment, :parent => Puppet::IisProperty) do
     desc ""
   end
 
-  newproperty(:processmodel_logontype, :parent => IisProperty) do
+  newproperty(:processmodel_logontype, :parent => Puppet::IisProperty) do
     desc ""
   end
 
-  newproperty(:processmodel_manualgroupmembership, :parent => IisProperty) do
+  newproperty(:processmodel_manualgroupmembership, :parent => Puppet::IisProperty) do
     desc ""
   end
 
-  newproperty(:processmodel_idletimeout, :parent => IisProperty) do
+  newproperty(:processmodel_idletimeout, :parent => Puppet::IisProperty) do
     desc ""
   end
 
-  newproperty(:processmodel_maxprocesses, :parent => IisProperty) do
+  newproperty(:processmodel_maxprocesses, :parent => Puppet::IisProperty) do
     desc ""
   end
 
-  newproperty(:processmodel_shutdowntimelimit, :parent => IisProperty) do
+  newproperty(:processmodel_shutdowntimelimit, :parent => Puppet::IisProperty) do
     desc ""
   end
 
-  newproperty(:processmodel_startuptimelimit, :parent => IisProperty) do
+  newproperty(:processmodel_startuptimelimit, :parent => Puppet::IisProperty) do
     desc ""
   end
 
-  newproperty(:processmodel_pingingenabled, :parent => IisProperty) do
+  newproperty(:processmodel_pingingenabled, :parent => Puppet::IisProperty) do
     desc ""
   end
 
-  newproperty(:processmodel_pinginterval, :parent => IisProperty) do
+  newproperty(:processmodel_pinginterval, :parent => Puppet::IisProperty) do
     desc ""
   end
 
-  newproperty(:processmodel_pingresponsetime, :parent => IisProperty) do
+  newproperty(:processmodel_pingresponsetime, :parent => Puppet::IisProperty) do
     desc ""
   end
 
-  newproperty(:recycling_disallowoverlappingrotation, :parent => IisProperty) do
+  newproperty(:recycling_disallowoverlappingrotation, :parent => Puppet::IisProperty) do
     desc ""
   end
 
-  newproperty(:recycling_disallowrotationonconfigchange, :parent => IisProperty) do
+  newproperty(:recycling_disallowrotationonconfigchange, :parent => Puppet::IisProperty) do
     desc ""
   end
 
-  newproperty(:recycling_logeventonrecycle, :parent => IisProperty) do
+  newproperty(:recycling_logeventonrecycle, :parent => Puppet::IisProperty) do
     desc ""
   end
 
-  newproperty(:recycling_periodicrestart_memory, :parent => IisProperty) do
+  newproperty(:recycling_periodicrestart_memory, :parent => Puppet::IisProperty) do
     desc ""
   end
 
-  newproperty(:recycling_periodicrestart_privatememory, :parent => IisProperty) do
+  newproperty(:recycling_periodicrestart_privatememory, :parent => Puppet::IisProperty) do
     desc ""
   end
 
-  newproperty(:recycling_periodicrestart_requests, :parent => IisProperty) do
+  newproperty(:recycling_periodicrestart_requests, :parent => Puppet::IisProperty) do
     desc ""
   end
 
-  newproperty(:recycling_periodicrestart_time, :parent => IisProperty) do
+  newproperty(:recycling_periodicrestart_time, :parent => Puppet::IisProperty) do
     desc ""
   end
 
-  newproperty(:failure_loadbalancercapabilities, :parent => IisProperty) do
+  newproperty(:failure_loadbalancercapabilities, :parent => Puppet::IisProperty) do
     desc ""
   end
 
-  newproperty(:failure_orphanworkerprocess, :parent => IisProperty) do
+  newproperty(:failure_orphanworkerprocess, :parent => Puppet::IisProperty) do
     desc ""
   end
 
-  newproperty(:failure_orphanactionexe, :parent => IisProperty) do
+  newproperty(:failure_orphanactionexe, :parent => Puppet::IisProperty) do
     desc ""
   end
 
-  newproperty(:failure_orphanactionparams, :parent => IisProperty) do
+  newproperty(:failure_orphanactionparams, :parent => Puppet::IisProperty) do
     desc ""
   end
 
-  newproperty(:failure_rapidfailprotection, :parent => IisProperty) do
+  newproperty(:failure_rapidfailprotection, :parent => Puppet::IisProperty) do
     desc ""
   end
 
-  newproperty(:failure_rapidfailprotectioninterval, :parent => IisProperty) do
+  newproperty(:failure_rapidfailprotectioninterval, :parent => Puppet::IisProperty) do
     desc ""
   end
 
-  newproperty(:failure_rapidfailprotectionmaxcrashes, :parent => IisProperty) do
+  newproperty(:failure_rapidfailprotectionmaxcrashes, :parent => Puppet::IisProperty) do
     desc ""
   end
 
-  newproperty(:failure_autoshutdownexe, :parent => IisProperty) do
+  newproperty(:failure_autoshutdownexe, :parent => Puppet::IisProperty) do
     desc ""
   end
 
-  newproperty(:failure_autoshutdownparams, :parent => IisProperty) do
+  newproperty(:failure_autoshutdownparams, :parent => Puppet::IisProperty) do
     desc ""
   end
 
-  newproperty(:cpu_limit, :parent => IisProperty) do
+  newproperty(:cpu_limit, :parent => Puppet::IisProperty) do
     desc ""
   end
 
-  newproperty(:cpu_action, :parent => IisProperty) do
+  newproperty(:cpu_action, :parent => Puppet::IisProperty) do
     desc ""
   end
 
-  newproperty(:cpu_resetinterval, :parent => IisProperty) do
+  newproperty(:cpu_resetinterval, :parent => Puppet::IisProperty) do
     desc ""
   end
 
-  newproperty(:cpu_smpaffinitized, :parent => IisProperty) do
+  newproperty(:cpu_smpaffinitized, :parent => Puppet::IisProperty) do
     desc ""
   end
 
-  newproperty(:cpu_smpprocessoraffinitymask, :parent => IisProperty) do
+  newproperty(:cpu_smpprocessoraffinitymask, :parent => Puppet::IisProperty) do
     desc ""
   end
 
-  newproperty(:cpu_smpprocessoraffinitymask2, :parent => IisProperty) do
+  newproperty(:cpu_smpprocessoraffinitymask2, :parent => Puppet::IisProperty) do
     desc ""
   end
 end

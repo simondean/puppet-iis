@@ -1,4 +1,4 @@
-require File.join(File.dirname(__FILE__), '../iis_object')
+require File.join(File.dirname(__FILE__), '../iis/iis_object')
 
 Puppet::Type.type(:iis_app).provide(:iis_app, :parent => Puppet::Provider::IISObject) do
 	desc "IIS App"

@@ -10,11 +10,11 @@ Feature: IIS All Together
     Given no vdir called "PuppetIisDemo/"
     Given the manifest
     """
-      file {'c:/puppet_iis_demo':
+      file {'c:\puppet_iis_demo':
         ensure          => directory,
       }
 
-      file {'c:/puppet_iis_demo/default.aspx':
+      file {'c:\puppet_iis_demo\default.aspx':
         content         =>
 '<%@ Page Language="C#" %>
 <!DOCTYPE html>
