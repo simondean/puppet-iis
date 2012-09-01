@@ -1,11 +1,13 @@
 Puppet::Type.newtype(:iis_vdir) do
   @doc = "IIS Virtual Directory"
 
-  class IisPhysicalPathProperty < Puppet::Property
+  class IisProperty < Puppet::Property
     munge do |value|
       value.to_s
     end
+  end
 
+  class IisPhysicalPathProperty < IisProperty
     def insync?(is)
       self.is_to_s(is).casecmp(self.should_to_s(@should).gsub('/', '\\')) == 0
     end
@@ -27,15 +29,20 @@ Puppet::Type.newtype(:iis_vdir) do
     desc "Physical path"
   end
 
-  [:username,
-   :password,
-   :logonmethod,
-   :allowsubdirconfig].each do |property|
-    newproperty(property) do
-      munge do |value|
-        value.to_s
-      end
-    end
+  newproperty(:logonmethod, :parent => IisProperty) do
+    desc "Logon method for the physical path"
+  end
+
+  newproperty(:username, :parent => IisProperty) do
+    desc "User name that can access the physical path"
+  end
+
+  newproperty(:password, :parent => IisProperty) do
+    desc "Password for the user name"
+  end
+
+  newproperty(:allowsubdirconfig, :parent => IisProperty) do
+    desc "Controls whether IIS will load just the Web.config file in the physical path (false) or also the Web.config files in the sub-directories of the physical path (true)"
   end
 
   autorequire(:iis_site) do
