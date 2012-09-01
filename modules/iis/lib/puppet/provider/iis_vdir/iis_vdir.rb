@@ -19,4 +19,13 @@ Puppet::Type.type(:iis_vdir).provide(:iis_vdir, :parent => Puppet::Provider::IIS
     path = @resource[:name][(@resource[:iis_app].chomp('/').length)..-1]
     ["/app.name:#{@resource[:iis_app]}", "/path:#{path}"]
   end
+
+  def get_complex_property_arg(name, value)
+    case name
+      when :physicalpath
+        ["/physicalpath:#{value.gsub('/', '\\')}"]
+      else
+        nil
+    end
+  end
 end

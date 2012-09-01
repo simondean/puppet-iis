@@ -1,6 +1,16 @@
 Puppet::Type.newtype(:iis_vdir) do
   @doc = "IIS Virtual Directory"
 
+  class IisPhysicalPathProperty < Puppet::Property
+    munge do |value|
+      value.to_s
+    end
+
+    def insync?(is)
+      self.is_to_s(is).casecmp(self.should_to_s(@should).gsub('/', '\\')) == 0
+    end
+  end
+
   ensurable
 
   newparam(:name) do
@@ -13,8 +23,11 @@ Puppet::Type.newtype(:iis_vdir) do
     desc "Path of the app the virtual directory is under"
   end
 
-  [:physicalpath,
-   :username,
+  newproperty(:physicalpath, :parent => IisPhysicalPathProperty) do
+    desc "Physical path"
+  end
+
+  [:username,
    :password,
    :logonmethod,
    :allowsubdirconfig].each do |property|

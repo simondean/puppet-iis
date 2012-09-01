@@ -4,15 +4,15 @@ Feature: IIS Apps
   I want to use Puppet to manage IIS apps
 
   Background:
-    Given a site called "PuppetTest"
-    Given an apppool called "PuppetTest"
-    Given an apppool called "PuppetTest2"
+    Given a site called "Puppet Test"
+    Given an apppool called "Puppet Test"
+    Given an apppool called "Puppet Test 2"
     Given a directory called "C:\puppet_test"
     Given a directory called "C:\puppet_test2"
 
   Scenario Outline: No changes when present
     Given an app called "<iis_app>"
-    And its "applicationpool" property is set to "PuppetTest"
+    And its "applicationpool" property is set to "Puppet Test"
     And its "enabledprotocols" property is set to "http"
     And its "serviceautostartenabled" property is set to "false"
     And its "serviceautostartprovider" property is set to ""
@@ -26,7 +26,7 @@ Feature: IIS Apps
     """
       iis_app {'<iis_app>':
         ensure                                      => present,
-        applicationpool                             => 'PuppetTest',
+        applicationpool                             => 'Puppet Test',
         enabledprotocols                            => 'http',
         serviceautostartenabled                     => false,
         serviceautostartprovider                    => '',
@@ -41,7 +41,7 @@ Feature: IIS Apps
     When puppet applies the manifest
     Then puppet has not made changes
     And puppet has not changed the "<iis_app>" app
-    And puppet has left its "@applicationPool" property set to "PuppetTest"
+    And puppet has left its "@applicationPool" property set to "Puppet Test"
     And puppet has left its "@enabledProtocols" property set to "http"
     And puppet has left its "@serviceAutoStartEnabled" property set to "false"
     And puppet has left its "@serviceAutoStartProvider" property set to ""
@@ -54,8 +54,8 @@ Feature: IIS Apps
     
   Examples:
     | iis_app        |
-    | PuppetTest/    |
-    | PuppetTest/app |
+    | Puppet Test/    |
+    | Puppet Test/app |
     
   Scenario Outline: No changes when absent
     Given no app called "<iis_app>"
@@ -63,7 +63,7 @@ Feature: IIS Apps
     """
       iis_app {'<iis_app>':
         ensure          => absent,
-        applicationpool => 'PuppetTest',
+        applicationpool => 'Puppet Test',
       }
       """
     When puppet applies the manifest
@@ -72,8 +72,8 @@ Feature: IIS Apps
     
   Examples:
     | iis_app        |
-    | PuppetTest/    |
-    | PuppetTest/app |
+    | Puppet Test/    |
+    | Puppet Test/app |
 
   Scenario Outline: Create
     Given no app called "<iis_app>"
@@ -81,7 +81,7 @@ Feature: IIS Apps
     """
       iis_app {'<iis_app>':
         ensure          => present,
-        applicationpool => 'PuppetTest',
+        applicationpool => 'Puppet Test',
       }
       """
     When puppet applies the manifest
@@ -90,8 +90,8 @@ Feature: IIS Apps
     
   Examples:
     | iis_app        |
-    | PuppetTest/    |
-    | PuppetTest/app |
+    | Puppet Test/    |
+    | Puppet Test/app |
 
   Scenario Outline: Create with properties
     Given no app called "<iis_app>"
@@ -99,7 +99,7 @@ Feature: IIS Apps
     """
       iis_app {'<iis_app>':
         ensure                                      => present,
-        applicationpool                             => 'PuppetTest',
+        applicationpool                             => 'Puppet Test',
         enabledprotocols                            => 'http',
         serviceautostartenabled                     => false,
         serviceautostartprovider                    => '',
@@ -114,7 +114,7 @@ Feature: IIS Apps
     When puppet applies the manifest
     Then puppet has made changes
     And puppet has created the "<iis_app>" app
-    And puppet has set its "@applicationPool" property to "PuppetTest"
+    And puppet has set its "@applicationPool" property to "Puppet Test"
     And puppet has set its "@enabledProtocols" property to "http"
     And puppet has set its "@serviceAutoStartEnabled" property to "false"
     And puppet has set its "@serviceAutoStartProvider" property to ""
@@ -127,8 +127,8 @@ Feature: IIS Apps
     
   Examples:
     | iis_app        |
-    | PuppetTest/    |
-    | PuppetTest/app |
+    | Puppet Test/    |
+    | Puppet Test/app |
 
   Scenario Outline: Delete
     Given an app called "<iis_app>"
@@ -136,7 +136,7 @@ Feature: IIS Apps
     """
       iis_app {'<iis_app>':
         ensure          => absent,
-        applicationpool => 'PuppetTest',
+        applicationpool => 'Puppet Test',
       }
       """
     When puppet applies the manifest
@@ -145,16 +145,16 @@ Feature: IIS Apps
     
   Examples:
     | iis_app        |
-    | PuppetTest/    |
-    | PuppetTest/app |
+    | Puppet Test/    |
+    | Puppet Test/app |
 
   Scenario Outline: Reconfigure
     Given an app called "<iis_app>"
-    And its "applicationpool" property is set to "PuppetTest2"
+    And its "applicationpool" property is set to "Puppet Test 2"
     And its "enabledprotocols" property is set to "https"
     And its "serviceautostartenabled" property is set to "true"
     And its "serviceautostartprovider" property is set to ""
-    And its "virtualdirectorydefaults_path" property is set to "/PuppetTest"
+    And its "virtualdirectorydefaults_path" property is set to "/Puppet Test"
     And its "virtualdirectorydefaults_physicalpath" property is set to "C:\puppet_test2"
     And its "virtualdirectorydefaults_username" property is set to ""
     And its "virtualdirectorydefaults_password" property is set to ""
@@ -164,7 +164,7 @@ Feature: IIS Apps
     """
       iis_app {'<iis_app>':
         ensure                                      => present,
-        applicationpool                             => 'PuppetTest',
+        applicationpool                             => 'Puppet Test',
         enabledprotocols                            => 'http',
         serviceautostartenabled                     => false,
         serviceautostartprovider                    => '',
@@ -179,7 +179,7 @@ Feature: IIS Apps
     When puppet applies the manifest
     Then puppet has made changes
     And puppet has changed the "<iis_app>" app
-    And puppet has set its "@applicationPool" property to "PuppetTest"
+    And puppet has set its "@applicationPool" property to "Puppet Test"
     And puppet has set its "@enabledProtocols" property to "http"
     And puppet has set its "@serviceAutoStartEnabled" property to "false"
     And puppet has set its "@serviceAutoStartProvider" property to ""
@@ -192,5 +192,5 @@ Feature: IIS Apps
     
   Examples:
     | iis_app        |
-    | PuppetTest/    |
-    | PuppetTest/app |
+    | Puppet Test/    |
+    | Puppet Test/app |

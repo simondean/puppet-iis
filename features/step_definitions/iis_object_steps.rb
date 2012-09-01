@@ -50,7 +50,7 @@ def set_object_property(object_type, name, property)
 end
 
 def get_object_property(object_type, name, property)
-  output = `#{@appcmd} list #{object_type} #{name} /xml /config:*`
+  output = `#{@appcmd} list "#{object_type}" "#{name}" /xml /config:*`
   raise "Failed to get object properties.  Exit code #{$?.exitstatus}" unless $?.success?
   xml = Nokogiri::XML(output).at_xpath("/appcmd/*/*")
 
