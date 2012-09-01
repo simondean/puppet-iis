@@ -11,6 +11,8 @@ The module is available from: http://forge.puppetlabs.com/simondean/iis
 - Puppet installed via the Windows Installer
 - IIS installed
 
+The module works with IIS 7 and 7.5.  It does not work with IIS 6 or earlier as those versions of IIS did not include the appcmd tool.
+
 ## Example Usage
 
 1. Copy the modules\iis directory into C:\ProgramData\PuppetLabs\puppet\etc\modules, so that you have a C:\ProgramData\PuppetLabs\puppet\etc\modules\iis directory.
