@@ -65,6 +65,22 @@ The module works with IIS 7 and 7.5.  It does not work with IIS 6 or earlier as 
       puppet apply --debug iis_example.pp
 
 
+## Running the Acceptance Tests
+
+Before you can run the acceptance tests, you need to install the bundler gem and then install the module's "bundle".  You can do this by running: 
+
+```
+    >gem install bundler
+	>bundle install
+```
+
+You can then run the acceptance tests with this command: 
+
+```
+	>bundle exec rake acceptance_test
+```
+
+
 ## Tested on:
 
 - Tested against the Windows installer version of Puppet on Windows 7 64bit.  
