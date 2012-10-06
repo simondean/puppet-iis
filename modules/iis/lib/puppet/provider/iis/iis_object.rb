@@ -55,7 +55,13 @@ class Puppet::Provider::IISObject < Puppet::Provider
   end
 
   def self.list
-    extract_items(appcmd('list', iis_type(), '/xml', '/config:*'))
+    command_and_args = [command(:appcmd), 'list', iis_type(), '/xml', '/config:*']
+    command_line = command_and_args.flatten.map(&:to_s).join(" ")
+
+    output = execute(command_and_args, :failonfail => false)
+    raise Puppet::ExecutionFailure, "Execution of '#{command_line}' failed" if output.nil? or output.length == 0
+
+    extract_items(output)
   end
 
   def self.extract_items(items_xml)

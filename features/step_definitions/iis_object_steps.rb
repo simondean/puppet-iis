@@ -28,7 +28,8 @@ end
 
 def object_exists?(object_type, name)
   output = `#{@appcmd} list #{object_type} /xml`
-  raise "Failed to list objects.  Exit code #{$?.exitstatus}" unless $?.success?
+  success = [0, 1].include? $?.exitstatus
+  raise "Failed to list objects.  Exit code #{$?.exitstatus}" unless success
   xml = Nokogiri::XML(output)
 
   (xml.xpath("/appcmd/#{object_type.upcase}[@#{object_type.upcase}.NAME='#{name}']").length > 0)
