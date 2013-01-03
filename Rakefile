@@ -17,7 +17,7 @@ end
 
 desc "Build package"
 task :build do
-	success = system('bundle', 'exec', 'puppet', 'module', 'build', 'modules/iis')
+	success = system('bundle', 'exec', 'puppet', 'module', 'build', '.')
 	raise 'Build failed' unless success
 end
 
