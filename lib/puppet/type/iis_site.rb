@@ -13,6 +13,10 @@ Puppet::Type.newtype(:iis_site) do
     desc "Number assigned to a site when it is created. Default Web Site has an id of 1. Other sites are assigned a random id by IIS when they are created"
   end
 
+  newproperty(:physicalpath, :parent => Puppet::IisFileSystemPathProperty) do
+    desc "Phsyical Path for application."
+  end
+
   newproperty(:serverautostart, :parent => Puppet::IisProperty) do
     desc "Whether the site should be started automatically when the IIS management service is started"
   end
