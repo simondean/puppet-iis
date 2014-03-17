@@ -357,7 +357,43 @@ Puppet::Type.newtype(:iis_site) do
     desc ""
   end
 
-  newproperty(:bindings, :array_matching => :all) do
+  newproperty(:bindings, :array_matching => :all, :sort => :true) do
     desc ""
+
+    # Array equality matching taken from https://github.com/puppetlabs/puppet/blob/master/lib/puppet/property.rb
+    # and modified to ignore the order of bindings
+    def insync?(is)
+      self.devfail "#{self.class.name}'s should is not array" unless @should.is_a?(Array)
+
+      # an empty array is analogous to no should values
+      return true if @should.empty?
+
+      # Look for a matching value, either for all the @should values, or any of
+      # them, depending on the configuration of this property.
+      if match_all? then
+        # Emulate Array#== using our own comparison function.
+        # A non-array was not equal to an array, which @should always is.
+        return false unless is.is_a? Array
+
+        # If they were different lengths, they are not equal.
+        return false unless is.length == @should.length
+
+        # Finally, are all the elements equal?  In order to preserve the
+        # behaviour of previous 2.7.x releases, we need to impose some fun rules
+        # on "equality" here.
+        #
+        # Specifically, we need to implement *this* comparison: the two arrays
+        # are identical if the is values are == the should values, or if the is
+        # values are == the should values, stringified.
+        #
+        # This does mean that property equality is not commutative, and will not
+        # work unless the `is` value is carefully arranged to match the should.
+
+        # Sort the arrays before comparison, to avoid the issue noted above
+        return (is.sort == @should.sort or is == @should.map(&:to_s))
+      else
+        return @should.any? {|want| property_matches?(is, want) }
+      end
+    end
   end
 end
