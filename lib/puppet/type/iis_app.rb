@@ -21,6 +21,10 @@ Puppet::Type.newtype(:iis_app) do
     desc "Enabled protocols"
   end
 
+  newproperty(:physicalpath, :parent => Puppet::IisFileSystemPathProperty) do
+    desc "Physical path"
+  end
+  
   newproperty(:serviceautostartenabled, :parent => Puppet::IisProperty) do
     desc "Whether autostart is enabled"
   end
