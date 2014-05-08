@@ -113,12 +113,17 @@ class Puppet::Provider::IISObject < Puppet::Provider
   def execute_flush
     if @resource[:ensure] != :absent
       args = get_property_args()
-      if self.class.iis_type() == "app"
-				appcmd *(['set', self.class.iis_type()] + get_name_args_for_set() + get_property_args())
+			if self.class.iis_type() == "app"
+				if @resource[:physicalpath]
+					appcmd *(['set', self.class.iis_type()] + get_name_args_for_set())
+				else
+					appcmd *(['set', self.class.iis_type()] + get_name_args_for_set_no_physical_path() + args)
+				end
+			#	appcmd *(['set', self.class.iis_type(), resource[:name]] + args) if args.length > 0
 			else	
 				appcmd *(['set', self.class.iis_type(), resource[:name]] + args) if args.length > 0
 			end
-    end
+		end
   end
 
   def get_property_args()
