@@ -4,5 +4,5 @@ summary 'IIS module. Configures app pools, sites, applications and virtual direc
 description 'IIS module. Configures app pools, sites, applications and virtual directories.'
 project_page 'https://github.com/pikselpalette/puppet-iis'
 license 'Apache License, Version 2.0'
-author 'Simon Dean'
+author 'piksel'
 source 'https://github.com/pikselpalette/puppet-iis'
