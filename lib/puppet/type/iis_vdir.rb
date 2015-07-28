@@ -46,8 +46,9 @@ Puppet::Type.newtype(:iis_vdir) do
   end
 
   validate do
-    iis_app = self[:iis_app]
     name = self[:name]
+    self[:iis_app] ||= name
+    iis_app = self[:iis_app]
 
     raise Puppet::Error, "name should start with '#{iis_app.chomp('/')}'" unless ensure_trailing_slash(name).start_with?(ensure_trailing_slash(iis_app))
 
