@@ -359,5 +359,12 @@ Puppet::Type.newtype(:iis_site) do
 
   newproperty(:bindings, :array_matching => :all) do
     desc ""
+    def insync?(is)
+      is.to_a.flatten.sort == @should.to_a.flatten.sort
+    end
+    
+    def should_to_s(s)
+      s.inspect
+    end
   end
 end
